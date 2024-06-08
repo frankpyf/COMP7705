@@ -102,14 +102,14 @@ void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void AHeroCharacter::InitAbilityActorInfo()
 {
-	if(auto PlayerState = GetPlayerState<ABasePlayerState>())
+	if(auto HeroPlayerState = GetPlayerState<ABasePlayerState>())
 	{
-		auto PlayerAbilitySystem = PlayerState->GetAbilitySystemComponent();
+		auto PlayerAbilitySystem = HeroPlayerState->GetAbilitySystemComponent();
 		// it must have a valid ASC
 		check(PlayerAbilitySystem);
-		PlayerAbilitySystem->InitAbilityActorInfo(PlayerState, this);
+		PlayerAbilitySystem->InitAbilityActorInfo(HeroPlayerState, this);
 
 		AbilitySystemComponent = PlayerAbilitySystem;
-		BaseAttributeSet = PlayerState->GetBaseAttributeSet();
+		BaseAttributeSet = HeroPlayerState->GetBaseAttributeSet();
 	}
 }
