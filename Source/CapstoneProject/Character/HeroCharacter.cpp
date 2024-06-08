@@ -79,7 +79,10 @@ void AHeroCharacter::Move(const FInputActionValue& Value)
 
 void AHeroCharacter::RotateCamera()
 {
-	
+	if (auto SpringArm = GetComponentByClass<USpringArmComponent>())
+	{
+		
+	}
 }
 
 
