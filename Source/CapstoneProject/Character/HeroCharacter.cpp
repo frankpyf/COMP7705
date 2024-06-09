@@ -66,6 +66,8 @@ void AHeroCharacter::Move(const FInputActionValue& Value)
 	const FRotator& Rotation = GetControlRotation();
 	const FRotator YawRotation(0, Rotation.Yaw, 0);
 
+	const FRotator& CameraRotation = GetComponentByClass<USpringArmComponent>()->GetRelativeRotation();
+
 	// get forward vector
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	
@@ -81,7 +83,7 @@ void AHeroCharacter::RotateCamera()
 {
 	if (auto SpringArm = GetComponentByClass<USpringArmComponent>())
 	{
-		
+		SpringArm->AddRelativeRotation(FRotator(0.f, 90.f, 0.f));
 	}
 }
 
@@ -96,6 +98,9 @@ void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	{
 		if(MoveAction)
 			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AHeroCharacter::Move);
+
+		if(RotateCameraAction)
+			EnhancedInputComponent->BindAction(RotateCameraAction, ETriggerEvent::Triggered, this, &AHeroCharacter::RotateCamera);
 	}
 	else
 	{
