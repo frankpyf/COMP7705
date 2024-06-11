@@ -24,7 +24,7 @@ public:
 
 	const class UCharacterBaseAttributeSet* GetBaseAttributeSet() const;
 private:
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()

@@ -6,10 +6,12 @@
 #include "AbilitySystemComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "CapstoneProject/CharacterBaseAttributeSet.h"
 #include "CapstoneProject/Game/BasePlayerState.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameplayEffectTypes.h"
 
 AHeroCharacter::AHeroCharacter()
 {
@@ -32,13 +34,24 @@ void AHeroCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	//Add Input Mapping Context
-	if(auto PC = CastChecked<APlayerController>(GetController()))
+	if(auto PC = GetController<APlayerController>())
 	{
 		if (auto Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
 		{
 			Subsystem->ClearAllMappings();
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+	}
+	
+	// Bind Functions to Ability System
+	if(IsValid(AbilitySystemComponent))
+	{
+		BaseAttributeSet = AbilitySystemComponent->GetSet<UCharacterBaseAttributeSet>();
+		
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCharacterBaseAttributeSet::GetHealthAttribute())
+		.AddUObject(this, &AHeroCharacter::OnHealthChanged);
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCharacterBaseAttributeSet::GetMaxHealthAttribute())
+		.AddUObject(this, &AHeroCharacter::OnMaxHealthChanged);
 	}
 }
 
@@ -87,7 +100,15 @@ void AHeroCharacter::RotateCamera()
 	}
 }
 
+void AHeroCharacter::OnHealthChanged(const FOnAttributeChangeData& Health) const
+{
+	HealthChanged.Broadcast(Health.NewValue);
+}
 
+void AHeroCharacter::OnMaxHealthChanged(const FOnAttributeChangeData& MaxHealth) const
+{
+	MaxHealthChanged.Broadcast(MaxHealth.NewValue);
+}
 
 void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

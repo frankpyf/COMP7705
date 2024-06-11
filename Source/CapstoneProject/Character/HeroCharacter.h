@@ -7,6 +7,7 @@
 #include "HeroCharacter.generated.h"
 
 struct FInputActionValue;
+struct FOnAttributeChangeData;
 
 /**
  * 
@@ -16,6 +17,9 @@ class CAPSTONEPROJECT_API AHeroCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedEvent, float, NewHealth);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedEvent, float, NewMaxHealth);
+	
 public:
 	AHeroCharacter();
 
@@ -24,12 +28,14 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 
 	virtual void OnRep_PlayerState() override;
-	
 protected:
 	void Move(const FInputActionValue&);
 
 	// Rotate Camera Spring Arm by 45 degrees
 	void RotateCamera();
+
+	void OnHealthChanged(const FOnAttributeChangeData&) const;
+	void OnMaxHealthChanged(const FOnAttributeChangeData&) const;
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	
@@ -46,4 +52,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
 	UInputAction* RotateCameraAction;
+	
+	UPROPERTY(BlueprintAssignable, Category = "Abilities | Attribute")
+	FOnHealthChangedEvent HealthChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Abilities | Attribute")
+	FOnMaxHealthChangedEvent MaxHealthChanged;
 };
