@@ -55,12 +55,23 @@ void AHeroCharacter::BeginPlay()
 	}
 }
 
+void AHeroCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
 void AHeroCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
 	// Set Actor Info for the Sever
 	InitAbilityActorInfo();
+
+	// Give Default Abilities
+	for(const auto Ability : DefaultAbilities)
+	{
+		GiveAbility(Ability);
+	}
 }
 
 void AHeroCharacter::OnRep_PlayerState()

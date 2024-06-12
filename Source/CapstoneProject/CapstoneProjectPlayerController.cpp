@@ -18,5 +18,4 @@ void ACapstoneProjectPlayerController::SetupInputComponent()
 {
 	// set up gameplay key bindings
 	Super::SetupInputComponent();
-
 }

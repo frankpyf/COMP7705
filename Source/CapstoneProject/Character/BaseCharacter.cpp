@@ -3,6 +3,9 @@
 
 #include "BaseCharacter.h"
 
+#include "AbilitySystemComponent.h"
+#include "Abilities/GameplayAbility.h"
+
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
@@ -18,11 +21,12 @@ void ABaseCharacter::BeginPlay()
 	
 }
 
-// Called every frame
-void ABaseCharacter::Tick(float DeltaTime)
+void ABaseCharacter::GiveAbility(TSubclassOf<UGameplayAbility> NewAbility)
 {
-	Super::Tick(DeltaTime);
-
+	if(!HasAuthority() || !AbilitySystemComponent || !IsValid(NewAbility))
+		return;
+	const FGameplayAbilitySpec Spec(NewAbility);
+	AbilitySystemComponent->GiveAbility(Spec);
 }
 
 // Called to bind functionality to input
