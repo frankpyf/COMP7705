@@ -46,6 +46,10 @@ private:
 	void InitAbilityActorInfo();
 
 protected:
+	/** Interaction Component **/
+	UPROPERTY()
+	class UInteractionComponent* InteractionComponent;
+	
 	/** MappingContext */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
 	class UInputMappingContext* DefaultMappingContext;

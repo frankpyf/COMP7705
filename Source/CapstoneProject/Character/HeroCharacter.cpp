@@ -12,6 +12,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameplayEffectTypes.h"
+#include "CapstoneProject/Components/InteractionComponent.h"
 
 AHeroCharacter::AHeroCharacter()
 {
@@ -27,6 +28,8 @@ AHeroCharacter::AHeroCharacter()
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
 }
 
 void AHeroCharacter::BeginPlay()
