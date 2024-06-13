@@ -22,8 +22,12 @@ void UInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	// Only tick local component
+	if(const auto OwnerPawn = Cast<APawn>(GetOwner()))
+	{
+		if(!OwnerPawn->IsLocallyControlled())
+			PrimaryComponentTick.bCanEverTick = false;
+	}
 }
 
 
