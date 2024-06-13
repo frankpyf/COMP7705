@@ -4,6 +4,7 @@
 #include "Room.h"
 #include "Corridor.h"
 #include "CapstoneProject/PortalActor.h"
+#include "CapstoneProject/Interactables/BaseInteractable.h"
 #include "Components/SplineComponent.h"
 
 // Sets default values

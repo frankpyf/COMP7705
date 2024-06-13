@@ -43,7 +43,7 @@ protected:
 	TSubclassOf<class ACorridor> CorridorActor;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> ChestActor;
+	TSubclassOf<class ABaseInteractable> ChestActor;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<APortalActor> PortalActor;
