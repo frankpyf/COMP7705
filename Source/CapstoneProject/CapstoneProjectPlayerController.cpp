@@ -12,6 +12,7 @@ void ACapstoneProjectPlayerController::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
+	bShowMouseCursor = true;
 }
 
 void ACapstoneProjectPlayerController::SetupInputComponent()
