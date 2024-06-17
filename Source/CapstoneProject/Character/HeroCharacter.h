@@ -47,7 +47,7 @@ private:
 
 protected:
 	/** Interaction Component **/
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	class UInteractionComponent* InteractionComponent;
 	
 	/** MappingContext */

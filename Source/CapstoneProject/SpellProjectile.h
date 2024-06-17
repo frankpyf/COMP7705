@@ -16,6 +16,9 @@ class CAPSTONEPROJECT_API ASpellProjectile : public AActor
 
 	UPROPERTY()
 	class UParticleSystemComponent* EffectComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UProjectileMovementComponent* MovementComp;
 public:	
 	// Sets default values for this actor's properties
 	ASpellProjectile();

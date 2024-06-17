@@ -3,6 +3,8 @@
 
 #include "SpellProjectile.h"
 
+#include "Projects.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 
@@ -14,9 +16,15 @@ ASpellProjectile::ASpellProjectile()
 
 	SphereComponent = CreateDefaultSubobject<USphereComponent>("SphereComponent");
 	RootComponent = SphereComponent;
+	// SphereComponent->SetCollisionProfileName("Projectile");
 
 	EffectComponent = CreateDefaultSubobject<UParticleSystemComponent>("EffectComponent");
 	EffectComponent->SetupAttachment(GetRootComponent());
+
+	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComponent");
+	MovementComp->InitialSpeed = 1000.f;
+	MovementComp->bRotationFollowsVelocity = true;
+	MovementComp->bInitialVelocityInLocalSpace = true;
 }
 
 // Called when the game starts or when spawned
