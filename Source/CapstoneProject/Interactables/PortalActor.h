@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "BaseInteractable.h"
 #include "PortalActor.generated.h"
 
 UCLASS()
-class CAPSTONEPROJECT_API APortalActor : public AActor
+class CAPSTONEPROJECT_API APortalActor : public ABaseInteractable
 {
 	GENERATED_BODY()
 	
@@ -16,21 +17,18 @@ class CAPSTONEPROJECT_API APortalActor : public AActor
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Levels", meta=(AllowPrivateAccess="true"))
 	TArray<FName> LevelsToLoad;
-protected:
-	UPROPERTY(BlueprintReadWrite)
-	bool bIsPreparing = true;
+
+	static bool bIsPreparing;
 public:	
 	// Sets default values for this actor's properties
 	APortalActor();
-	
+
 	UFUNCTION(BlueprintCallable)
-	void OnOverlap();
+	bool GetIsPreparing() const { return bIsPreparing; }
+
+	UFUNCTION(BlueprintCallable)
+	void FlipIsPreparing() { bIsPreparing = !bIsPreparing; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 };

@@ -64,7 +64,8 @@ void UInteractionComponent::FindBestInteract()
 			{
 				if(HitActor->Implements<UInteractInterface>())
 				{
-					FocusedActor = HitActor;
+					if(FVector::Dist(HitActor->GetActorLocation(), GetOwner()->GetActorLocation()) < 500.f)
+						FocusedActor = HitActor;
 				}
 			}
 			// Find Mouse Location in World Space
