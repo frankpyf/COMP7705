@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "DungeonStrategy.h"
-#include "CapstoneProject/PortalActor.h"
 #include "DungeonGenerator.generated.h"
 
 UCLASS()
@@ -46,7 +45,7 @@ protected:
 	TSubclassOf<class ABaseInteractable> ChestActor;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<APortalActor> PortalActor;
+	TSubclassOf<class APortalActor> PortalActor;
 	
 #if WITH_EDITORONLY_DATA
 	UPROPERTY(EditAnywhere)
@@ -58,20 +57,20 @@ public:
 	ADungeonGenerator();
 
 	UFUNCTION(BlueprintCallable)
-	void AddRoom(int32 X, int32 Y, int32 RoomLenX, int32 RoomLenY) const;
+	void AddRoom(int32 X, int32 Y, int32 RoomLenX, int32 RoomLenY);
 
 	UFUNCTION(BlueprintCallable)
-	ACorridor* PlaceCorridor(int32 X, int32 Y) const;
+	ACorridor* PlaceCorridor(int32 X, int32 Y);
 	UFUNCTION(BlueprintCallable)
-	void AddCorridorPoint(ACorridor* InCorridor, int32 X, int32 Y) const;
+	void AddCorridorPoint(ACorridor* InCorridor, int32 X, int32 Y);
 	UFUNCTION(BlueprintCallable)
 	void SetSpawnPoint(const int32 X, const int32 Y);
 	
 	UFUNCTION(BlueprintCallable)
-	void AddChest(const int32 X, const int32 Y) const;
+	void AddChest(const int32 X, const int32 Y);
 	
 	UFUNCTION(BlueprintCallable)
-	void AddPortal(const int32 X, const int32 Y) const;
+	void AddPortal(const int32 X, const int32 Y);
 
 	UFUNCTION(BlueprintCallable)
 	void GenerateDungeon();
@@ -94,7 +93,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void AddInternal(const int32 X, const int32 Y, const TSubclassOf<AActor>) const;
+	void AddInternal(const int32 X, const int32 Y, const TSubclassOf<AActor>&);
+	
+	virtual void Destroyed() override;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

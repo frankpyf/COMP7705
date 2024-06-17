@@ -24,17 +24,17 @@ class IGenerateStrategy
 {
 	GENERATED_BODY()
 public:
-	virtual TArray<EDungeonType> DoGenerate(const ADungeonGenerator& InGenerator) = 0;
+	virtual TArray<EDungeonType> DoGenerate(ADungeonGenerator& InGenerator) = 0;
 };
 
 class ILinearStrategy : public IGenerateStrategy
 {
 public:
-	virtual TArray<EDungeonType> DoGenerate(const ADungeonGenerator& InGenerator) override;
+	virtual TArray<EDungeonType> DoGenerate(ADungeonGenerator& InGenerator) override;
 };
 
 class ITinyKeepStrategy : public IGenerateStrategy
 {
 public:
-	virtual TArray<EDungeonType> DoGenerate(const ADungeonGenerator& InGenerator) override;
+	virtual TArray<EDungeonType> DoGenerate(ADungeonGenerator& InGenerator) override;
 };

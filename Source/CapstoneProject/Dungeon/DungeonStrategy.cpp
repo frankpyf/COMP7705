@@ -103,7 +103,7 @@ namespace DungeonGenerationUtils
 		return ShortestPath;
 	}
 		
-	TArray<FBox2d> RandomlyPlaceRooms(const ADungeonGenerator& InGenerator, TArray<EDungeonType>& InDungeon)
+	TArray<FBox2d> RandomlyPlaceRooms(ADungeonGenerator& InGenerator, TArray<EDungeonType>& InDungeon)
 	{
 		const auto CheckTilesAvailable = [&](const FIntPoint LowerLeft, const FIntPoint Extent)
 		{
@@ -163,7 +163,7 @@ namespace DungeonGenerationUtils
 	}
 }
 
-TArray<EDungeonType> ILinearStrategy::DoGenerate(const ADungeonGenerator& InGenerator)
+TArray<EDungeonType> ILinearStrategy::DoGenerate(ADungeonGenerator& InGenerator)
 {
 	TArray<EDungeonType> Data;
 	Data.Init(EDungeonType::None, InGenerator.GetLenX() * InGenerator.GetLenY());
@@ -210,7 +210,7 @@ TArray<EDungeonType> ILinearStrategy::DoGenerate(const ADungeonGenerator& InGene
 	return Data;
 }
 
-TArray<EDungeonType> ITinyKeepStrategy::DoGenerate(const ADungeonGenerator& InGenerator)
+TArray<EDungeonType> ITinyKeepStrategy::DoGenerate(ADungeonGenerator& InGenerator)
 {
 	TArray<EDungeonType> Data;
 	Data.Init(EDungeonType::None, InGenerator.GetLenX() * InGenerator.GetLenY());
