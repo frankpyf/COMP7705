@@ -3,7 +3,7 @@
 #include "DungeonGenerator.h"
 #include "Room.h"
 #include "Corridor.h"
-#include "CapstoneProject/PortalActor.h"
+#include "CapstoneProject/Interactables/PortalActor.h"
 #include "CapstoneProject/Interactables/BaseInteractable.h"
 #include "Components/SplineComponent.h"
 
@@ -17,7 +17,7 @@ ADungeonGenerator::ADungeonGenerator()
 	check(RoomMaxLenY < LenY)
 }
 
-void ADungeonGenerator::AddRoom(int32 X, int32 Y, int32 RoomLenX, int32 RoomLenY) const
+void ADungeonGenerator::AddRoom(int32 X, int32 Y, int32 RoomLenX, int32 RoomLenY)
 {
 	if(RoomActor.Get())
 	{
@@ -26,7 +26,7 @@ void ADungeonGenerator::AddRoom(int32 X, int32 Y, int32 RoomLenX, int32 RoomLenY
 		const int32 LowerLeftY = Y * TileLen;
 		FTransform RoomTransform;
 		RoomTransform.SetTranslation(FVector(LowerLeftX, LowerLeftY, 0));
-		auto SpawnedRoom = GetWorld()->SpawnActorDeferred<ARoom>(RoomActor, RoomTransform);
+		auto SpawnedRoom = GetWorld()->SpawnActorDeferred<ARoom>(RoomActor, RoomTransform, this);
 		SpawnedRoom->XLen = RoomLenX;
 		SpawnedRoom->YLen = RoomLenY;
 		ARoom::TileUnitLen = TileLen;
@@ -44,18 +44,20 @@ void ADungeonGenerator::AddRoom(int32 X, int32 Y, int32 RoomLenX, int32 RoomLenY
 	}
 }
 
-ACorridor* ADungeonGenerator::PlaceCorridor(int32 X, int32 Y) const
+ACorridor* ADungeonGenerator::PlaceCorridor(int32 X, int32 Y)
 {
 	if(CorridorActor.Get())
 	{
 		const FVector ActualWorldPos = FVector((X + 0.5) * TileLen, (Y + 0.5) * TileLen, 0);
-		auto CurCorridor = GetWorld()->SpawnActor<ACorridor>(CorridorActor, ActualWorldPos, FRotator::ZeroRotator);
+		FActorSpawnParameters Params;
+		Params.Owner = this;
+		auto CurCorridor = GetWorld()->SpawnActor<ACorridor>(CorridorActor, ActualWorldPos, FRotator::ZeroRotator, Params);
 		return CurCorridor;
 	}
 	return nullptr;
 }
 
-void ADungeonGenerator::AddCorridorPoint(ACorridor* InCorridor, int32 X, int32 Y) const
+void ADungeonGenerator::AddCorridorPoint(ACorridor* InCorridor, int32 X, int32 Y)
 {
 	if(InCorridor)
 	{
@@ -69,18 +71,26 @@ void ADungeonGenerator::SetSpawnPoint(const int32 X, const int32 Y)
 	SetActorLocation(FVector(-X * TileLen, -Y * TileLen, 0));
 }
 
-void ADungeonGenerator::AddInternal(int32 X, int32 Y, const TSubclassOf<AActor> InActor) const
+void ADungeonGenerator::AddInternal(int32 X, int32 Y, const TSubclassOf<AActor>& InActor)
 {
 	if(InActor)
 	{
 		const int32 ActualX = (X + 0.5) * TileLen;
 		const int32 ActualY = (Y + 0.5) * TileLen;
 		const FVector ActualWorldPos(ActualX, ActualY, 0);
-		GetWorld()->SpawnActor(InActor, &ActualWorldPos);
+		FActorSpawnParameters Params;
+		Params.Owner = this;
+		GetWorld()->SpawnActor<AActor>(InActor, ActualWorldPos, FRotator::ZeroRotator, Params);
 	}
 }
 
-void ADungeonGenerator::AddChest(int32 X, int32 Y) const
+void ADungeonGenerator::Destroyed()
+{
+	Super::Destroyed();
+	
+}
+
+void ADungeonGenerator::AddChest(int32 X, int32 Y)
 {
 	if(ChestActor)
 	{
@@ -88,7 +98,7 @@ void ADungeonGenerator::AddChest(int32 X, int32 Y) const
 	}
 }
 
-void ADungeonGenerator::AddPortal(int32 X, int32 Y) const
+void ADungeonGenerator::AddPortal(int32 X, int32 Y)
 {
 	if(PortalActor)
 	{
