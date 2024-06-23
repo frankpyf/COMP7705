@@ -21,6 +21,11 @@ void ABaseCharacter::BeginPlay()
 	
 }
 
+FVector ABaseCharacter::GetAttackSocketLocation_Implementation()
+{
+	return GetMesh()->GetSocketLocation("SpellLocation");
+}
+
 void ABaseCharacter::GiveAbility(TSubclassOf<UGameplayAbility> NewAbility)
 {
 	if(!HasAuthority() || !AbilitySystemComponent || !IsValid(NewAbility))

@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "CapstoneProject/Interfaces/CombatInterface.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
 class UGameplayAbility;
 
 UCLASS()
-class CAPSTONEPROJECT_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
+class CAPSTONEPROJECT_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -24,6 +25,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	FVector GetAttackSocketLocation_Implementation() override;
+	
 	UFUNCTION(BlueprintCallable)
 	void GiveAbility(TSubclassOf<UGameplayAbility> NewAbility);
 public:	
