@@ -64,7 +64,7 @@ void UInteractionComponent::FindBestInteract()
 			{
 				if(HitActor->Implements<UInteractInterface>())
 				{
-					if(FVector::Dist(HitActor->GetActorLocation(), GetOwner()->GetActorLocation()) < 500.f)
+					if(FVector::Dist(HitActor->GetActorLocation(), GetOwner()->GetActorLocation()) < 200.f)
 						FocusedActor = HitActor;
 				}
 			}
