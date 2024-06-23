@@ -156,3 +156,18 @@ void AHeroCharacter::InitAbilityActorInfo()
 		BaseAttributeSet = HeroPlayerState->GetBaseAttributeSet();
 	}
 }
+
+void AHeroCharacter::WantToStrafe()
+{
+	bWantToStrafe = !bWantToStrafe;
+	if(bWantToStrafe)
+	{
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		GetCharacterMovement()->bUseControllerDesiredRotation = true;
+	}
+	else
+	{
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	}
+}

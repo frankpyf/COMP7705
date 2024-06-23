@@ -45,6 +45,8 @@ protected:
 private:
 	void InitAbilityActorInfo();
 
+	UFUNCTION(BlueprintCallable)
+	void WantToStrafe();
 protected:
 	/** Interaction Component **/
 	UPROPERTY(BlueprintReadOnly)
@@ -65,4 +67,6 @@ protected:
 
 	UPROPERTY(BlueprintAssignable, Category = "Abilities | Attribute")
 	FOnMaxHealthChangedEvent MaxHealthChanged;
+
+	bool bWantToStrafe = false;
 };
