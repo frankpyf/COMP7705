@@ -17,10 +17,10 @@ class CAPSTONEPROJECT_API USpellAttackAbility : public UGameplayAbility
 public:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
+protected:
 	UFUNCTION(BlueprintCallable)
 	void SpawnProjectile();
 
-protected:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASpellProjectile> ProjectileClass;
 };
