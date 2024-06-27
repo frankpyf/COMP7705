@@ -2,18 +2,20 @@
 
 
 #include "SpellAttackAbility.h"
-#include "SpellProjectile.h"
-#include "Interfaces/CombatInterface.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "CapstoneProject/SpellProjectile.h"
+#include "CapstoneProject/Interfaces/CombatInterface.h"
 
 void USpellAttackAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                           const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
                                           const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-	SpawnProjectile();
 }
 
-void USpellAttackAbility::SpawnProjectile()
+void USpellAttackAbility::SpawnProjectile(const FVector& TargetLocation)
 {
 	const bool bIsAuthority = GetAvatarActorFromActorInfo()->HasAuthority();
 	if(!bIsAuthority)
@@ -21,16 +23,25 @@ void USpellAttackAbility::SpawnProjectile()
 	
 	if(!GetAvatarActorFromActorInfo()->Implements<UCombatInterface>())
 		return;
-	const auto SpawnTransform = FTransform(GetAvatarActorFromActorInfo()->GetActorRotation(),
-		ICombatInterface::Execute_GetAttackSocketLocation(GetAvatarActorFromActorInfo()));
+	
+	const FVector SourceLocation = ICombatInterface::Execute_GetAttackSocketLocation(GetAvatarActorFromActorInfo());
+	const FRotator Rotation = (TargetLocation - SourceLocation).Rotation();
+	const auto SpawnTransform = FTransform(Rotation, SourceLocation);
 	FActorSpawnParameters Params;
 	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	
-	const auto Projectile = GetWorld()->SpawnActorDeferred<ASpellProjectile>(ProjectileClass,
+	auto Projectile = GetWorld()->SpawnActorDeferred<ASpellProjectile>(ProjectileClass,
 		SpawnTransform,
 		GetAvatarActorFromActorInfo(),
 		Cast<APawn>(GetAvatarActorFromActorInfo()),
 		ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+
+	if(auto SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo()))
+	{
+		auto SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
+		Projectile->DamageEffectSpecHandle = SpecHandle;
+		Projectile->Source = GetAvatarActorFromActorInfo();
+	}
 
 	Projectile->FinishSpawning(SpawnTransform);
 }

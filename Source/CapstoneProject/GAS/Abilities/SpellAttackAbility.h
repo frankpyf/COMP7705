@@ -19,8 +19,11 @@ public:
 
 protected:
 	UFUNCTION(BlueprintCallable)
-	void SpawnProjectile();
+	void SpawnProjectile(const FVector& TargetLocation);
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASpellProjectile> ProjectileClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UGameplayEffect> DamageEffectClass;
 };

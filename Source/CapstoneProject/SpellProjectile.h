@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffectTypes.h"
 #include "GameFramework/Actor.h"
 #include "SpellProjectile.generated.h"
 
@@ -15,6 +16,12 @@ class CAPSTONEPROJECT_API ASpellProjectile : public AActor
 	
 	UPROPERTY(EditAnywhere)
 	class USphereComponent* SphereComponent;
+public:
+	UPROPERTY(BlueprintReadWrite, meta=(ExposeOnSpawn=true))
+	FGameplayEffectSpecHandle DamageEffectSpecHandle;
+
+	UPROPERTY()
+	AActor* Source;
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Niagara")
 	class UNiagaraComponent* EffectComponent;
@@ -46,12 +53,10 @@ protected:
 
 	UFUNCTION()
 	void HitCallback(
-		UPrimitiveComponent* HitComponent,
+		UPrimitiveComponent* OverlappedComponent,
 		AActor* OtherActor,
 		UPrimitiveComponent* OtherComp,
-		FVector NormalImpulse,
-		const FHitResult& Hit);
-
-	UFUNCTION()
-	void DestroyWrapper();
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
 };
