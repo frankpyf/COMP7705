@@ -17,17 +17,9 @@ class CAPSTONEPROJECT_API APortalActor : public ABaseInteractable
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Levels", meta=(AllowPrivateAccess="true"))
 	TArray<FName> LevelsToLoad;
-
-	static bool bIsPreparing;
 public:	
 	// Sets default values for this actor's properties
 	APortalActor();
-
-	UFUNCTION(BlueprintCallable)
-	bool GetIsPreparing() const { return bIsPreparing; }
-
-	UFUNCTION(BlueprintCallable)
-	void FlipIsPreparing() { bIsPreparing = !bIsPreparing; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

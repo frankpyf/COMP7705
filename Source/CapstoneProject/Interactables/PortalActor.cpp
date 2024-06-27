@@ -3,8 +3,6 @@
 
 #include "PortalActor.h"
 
-bool APortalActor::bIsPreparing = true;
-
 // Sets default values
 APortalActor::APortalActor()
 {
