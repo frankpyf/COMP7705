@@ -25,7 +25,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/** Begin Combat Interface **/
+	
 	FVector GetAttackSocketLocation_Implementation() override;
+	virtual void OnHit() override;
+	virtual void OnDeath() override;
+
+	/** End Combat Interface **/
+
+	UFUNCTION(NetMulticast, Reliable)
+	void HandleDeath();
 	
 	UFUNCTION(BlueprintCallable)
 	void GiveAbility(TSubclassOf<UGameplayAbility> NewAbility);
@@ -38,7 +47,7 @@ protected:
 	UPROPERTY()
 	const class UCharacterBaseAttributeSet* BaseAttributeSet;
 
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
