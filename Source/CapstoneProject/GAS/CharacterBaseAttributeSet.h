@@ -32,12 +32,12 @@ public:
 	ATTRIBUTE_ACCESSORS(UCharacterBaseAttributeSet, MaxHealth)
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Character")
-	FGameplayAttributeData Endurance;
-	ATTRIBUTE_ACCESSORS(UCharacterBaseAttributeSet, Endurance)
+	FGameplayAttributeData Stamina;
+	ATTRIBUTE_ACCESSORS(UCharacterBaseAttributeSet, Stamina)
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Character")
-	FGameplayAttributeData MaxEndurance;
-	ATTRIBUTE_ACCESSORS(UCharacterBaseAttributeSet, MaxEndurance)
+	FGameplayAttributeData MaxStamina;
+	ATTRIBUTE_ACCESSORS(UCharacterBaseAttributeSet, MaxStamina)
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Character")
 	FGameplayAttributeData Mana;
@@ -46,8 +46,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Character")
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UCharacterBaseAttributeSet, MaxMana)
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Character")
-	FGameplayAttributeData Speed; // cm/s 
-	ATTRIBUTE_ACCESSORS(UCharacterBaseAttributeSet, Speed)
+
+	UPROPERTY(BlueprintReadOnly, Category="Meta Attributes")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UCharacterBaseAttributeSet, IncomingDamage);
 };
