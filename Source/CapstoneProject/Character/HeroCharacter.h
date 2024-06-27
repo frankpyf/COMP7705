@@ -20,33 +20,6 @@ class CAPSTONEPROJECT_API AHeroCharacter : public ABaseCharacter
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedEvent, float, NewHealth);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedEvent, float, NewMaxHealth);
 	
-public:
-	AHeroCharacter();
-
-	virtual void BeginPlay() override;
-	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	virtual void PossessedBy(AController* NewController) override;
-
-	virtual void OnRep_PlayerState() override;
-protected:
-	void Move(const FInputActionValue&);
-
-	// Rotate Camera Spring Arm by 45 degrees
-	void RotateCamera();
-
-	void OnHealthChanged(const FOnAttributeChangeData&) const;
-	void OnMaxHealthChanged(const FOnAttributeChangeData&) const;
-
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-	
-private:
-	void InitAbilityActorInfo();
-
-	UFUNCTION(BlueprintCallable)
-	void WantToStrafe();
 protected:
 	/** Interaction Component **/
 	UPROPERTY(BlueprintReadOnly)
@@ -68,5 +41,46 @@ protected:
 	UPROPERTY(BlueprintAssignable, Category = "Abilities | Attribute")
 	FOnMaxHealthChangedEvent MaxHealthChanged;
 
-	bool bWantToStrafe = false;
+	UPROPERTY(EditDefaultsOnly)
+	float LockRange = 1000.f;
+private:
+	UPROPERTY()
+	TObjectPtr<class AEnemyCharacter> FocusedEnemy = nullptr;
+	
+	bool bLockOnEnemy = false;
+public:
+	AHeroCharacter();
+
+	virtual void BeginPlay() override;
+	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void PossessedBy(AController* NewController) override;
+
+	virtual void OnRep_PlayerState() override;
+protected:
+	void Move(const FInputActionValue&);
+
+	// Rotate Camera Spring Arm by 45 degrees
+	void RotateCamera();
+
+	UFUNCTION(BlueprintCallable)
+	void TryLockOn();
+
+	UFUNCTION(BlueprintCallable)
+	void StopLocking();
+
+	void DoLockOn(float DeltaTime);
+
+	void OnHealthChanged(const FOnAttributeChangeData&) const;
+	void OnMaxHealthChanged(const FOnAttributeChangeData&) const;
+
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	
+private:
+	void InitAbilityActorInfo();
+
+	void WantToStrafe() const;
+	void StopStrafing() const;
 };

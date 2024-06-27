@@ -3,7 +3,7 @@
 
 #include "EnemyCharacter.h"
 #include "AbilitySystemComponent.h"
-#include "CapstoneProject/CharacterBaseAttributeSet.h"
+#include "CapstoneProject/GAS/CharacterBaseAttributeSet.h"
 
 AEnemyCharacter::AEnemyCharacter()
 {
@@ -21,4 +21,10 @@ void AEnemyCharacter::BeginPlay()
 		BaseAttributeSet = AbilitySystemComponent->GetSet<UCharacterBaseAttributeSet>();
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	}
+}
+
+void AEnemyCharacter::OnDeath()
+{
+	Super::OnDeath();
+	SetLifeSpan(5.f);
 }

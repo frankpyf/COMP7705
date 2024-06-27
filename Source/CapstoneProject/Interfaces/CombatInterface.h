@@ -27,4 +27,7 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void UpdateFacingDirection(const FVector& FacingDirection);
+
+	virtual void OnHit() = 0;
+	virtual void OnDeath() = 0;
 };

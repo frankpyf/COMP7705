@@ -4,15 +4,18 @@
 #include "HeroCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "EnemyCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "CapstoneProject/CharacterBaseAttributeSet.h"
+#include "CapstoneProject/GAs/CharacterBaseAttributeSet.h"
 #include "CapstoneProject/Game/BasePlayerState.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameplayEffectTypes.h"
 #include "CapstoneProject/Components/InteractionComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 AHeroCharacter::AHeroCharacter()
 {
@@ -61,6 +64,8 @@ void AHeroCharacter::BeginPlay()
 void AHeroCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	DoLockOn(DeltaTime);
 }
 
 void AHeroCharacter::PossessedBy(AController* NewController)
@@ -114,6 +119,89 @@ void AHeroCharacter::RotateCamera()
 	}
 }
 
+void AHeroCharacter::TryLockOn()
+{
+	// Get Nearest Enemy
+	TArray<FHitResult> Hits;
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECC_Pawn));
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(this);
+	UKismetSystemLibrary::SphereTraceMultiForObjects(this,
+		GetActorLocation() + FVector(0, 0, 100),
+		GetActorLocation(),
+		LockRange,
+		ObjectTypes,
+		false,
+		ActorsToIgnore,
+		EDrawDebugTrace::ForDuration,
+		Hits,
+		true);
+	float MinDist = TNumericLimits<float>::Max();
+	for(const auto Hit : Hits)
+	{
+		if(auto Enemy = Cast<AEnemyCharacter>(Hit.GetActor()))
+		{
+			const FVector EnemyLocation = Enemy->GetActorLocation();
+			const float Dist = FVector::Dist(GetActorLocation(), EnemyLocation);
+			if(Dist < MinDist)
+			{
+				FocusedEnemy = Enemy;
+				MinDist = Dist;
+			}
+		}
+	}
+	if(FocusedEnemy)
+	{
+		bLockOnEnemy = true;
+		WantToStrafe();
+	}
+	else
+	{
+		bLockOnEnemy = false;
+		StopStrafing();
+	}
+}
+
+void AHeroCharacter::StopLocking()
+{
+	bLockOnEnemy = false;
+	FocusedEnemy = nullptr;
+	StopStrafing();
+}
+
+void AHeroCharacter::DoLockOn(float DeltaTime)
+{
+	if(!bLockOnEnemy)
+		return;
+	if(!FocusedEnemy)
+	{
+		StopLocking();
+		return;
+	}
+
+	const FVector EnemyLocation = FocusedEnemy->GetActorLocation();
+	const FVector HeroLocation = GetActorLocation();
+
+	// Check Focused Enemy Still in Range
+	if(FVector::Dist(HeroLocation, EnemyLocation) > LockRange)
+	{
+		FocusedEnemy = nullptr;
+		// if out of range try get one
+		TryLockOn();
+		if(!FocusedEnemy)
+		{
+			StopLocking();
+			return;
+		}
+	}
+
+	// Lock On Enemy
+	const auto TurnRotator = UKismetMathLibrary::FindLookAtRotation(HeroLocation, EnemyLocation);
+	
+	SetActorRotation(TurnRotator);
+}
+
 void AHeroCharacter::OnHealthChanged(const FOnAttributeChangeData& Health) const
 {
 	HealthChanged.Broadcast(Health.NewValue);
@@ -157,17 +245,15 @@ void AHeroCharacter::InitAbilityActorInfo()
 	}
 }
 
-void AHeroCharacter::WantToStrafe()
+void AHeroCharacter::WantToStrafe() const
 {
-	bWantToStrafe = !bWantToStrafe;
-	if(bWantToStrafe)
-	{
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-		GetCharacterMovement()->bUseControllerDesiredRotation = true;
-	}
-	else
-	{
-		GetCharacterMovement()->bOrientRotationToMovement = true;
-		GetCharacterMovement()->bUseControllerDesiredRotation = false;
-	}
+	// TODO: Modify Speed
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+}
+
+void AHeroCharacter::StopStrafing() const
+{
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 }

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
-#include "AbilitySystemInterface.h"
 #include "EnemyCharacter.generated.h"
 
 /**
@@ -20,4 +19,8 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
+
+	/** Begin of CombatInterface **/
+	virtual void OnDeath() override;
+	/** End of CombatInterface **/
 };
