@@ -3,7 +3,7 @@
 
 #include "BasePlayerState.h"
 #include "AbilitySystemComponent.h"
-#include "CapstoneProject/CharacterBaseAttributeSet.h"
+#include "CapstoneProject/GAS/CharacterBaseAttributeSet.h"
 
 ABasePlayerState::ABasePlayerState()
 {

@@ -5,3 +5,5 @@
 #include "CoreMinimal.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogCapstoneProject, Log, All);
+
+#define ECC_Projectile ECC_GameTraceChannel1

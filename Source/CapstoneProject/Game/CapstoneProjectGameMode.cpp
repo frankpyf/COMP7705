@@ -2,7 +2,6 @@
 
 #include "CapstoneProjectGameMode.h"
 #include "CapstoneProject/CapstoneProjectPlayerController.h"
-#include "CapstoneProject/CapstoneProjectCharacter.h"
 #include "GameFramework/HUD.h"
 #include "UObject/ConstructorHelpers.h"
 
