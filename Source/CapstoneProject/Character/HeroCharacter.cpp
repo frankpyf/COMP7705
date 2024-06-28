@@ -55,9 +55,15 @@ void AHeroCharacter::BeginPlay()
 		BaseAttributeSet = AbilitySystemComponent->GetSet<UCharacterBaseAttributeSet>();
 		
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCharacterBaseAttributeSet::GetHealthAttribute())
-		.AddUObject(this, &AHeroCharacter::OnHealthChanged);
+		.AddLambda([this](const FOnAttributeChangeData& Data)
+		{
+			HealthChanged.Broadcast(Data.NewValue);
+		});
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCharacterBaseAttributeSet::GetMaxHealthAttribute())
-		.AddUObject(this, &AHeroCharacter::OnMaxHealthChanged);
+		.AddLambda([this](const FOnAttributeChangeData& Data)
+		{
+			MaxHealthChanged.Broadcast(Data.NewValue);
+		});
 	}
 }
 
@@ -109,14 +115,6 @@ void AHeroCharacter::Move(const FInputActionValue& Value)
 	// add movement 
 	AddMovementInput(ForwardDirection, MovementVector.Y);
 	AddMovementInput(RightDirection, MovementVector.X);
-}
-
-void AHeroCharacter::RotateCamera()
-{
-	if (auto SpringArm = GetComponentByClass<USpringArmComponent>())
-	{
-		SpringArm->AddRelativeRotation(FRotator(0.f, 90.f, 0.f));
-	}
 }
 
 void AHeroCharacter::TryLockOn()
@@ -202,16 +200,6 @@ void AHeroCharacter::DoLockOn(float DeltaTime)
 	SetActorRotation(TurnRotator);
 }
 
-void AHeroCharacter::OnHealthChanged(const FOnAttributeChangeData& Health) const
-{
-	HealthChanged.Broadcast(Health.NewValue);
-}
-
-void AHeroCharacter::OnMaxHealthChanged(const FOnAttributeChangeData& MaxHealth) const
-{
-	MaxHealthChanged.Broadcast(MaxHealth.NewValue);
-}
-
 void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -221,13 +209,6 @@ void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	{
 		if(MoveAction)
 			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AHeroCharacter::Move);
-
-		if(RotateCameraAction)
-			EnhancedInputComponent->BindAction(RotateCameraAction, ETriggerEvent::Triggered, this, &AHeroCharacter::RotateCamera);
-	}
-	else
-	{
-		// UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
 

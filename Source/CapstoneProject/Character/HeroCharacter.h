@@ -8,7 +8,8 @@
 
 struct FInputActionValue;
 struct FOnAttributeChangeData;
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedEvent, float, NewHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedEvent, float, NewMaxHealth);
 /**
  * 
  */
@@ -17,9 +18,6 @@ class CAPSTONEPROJECT_API AHeroCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedEvent, float, NewHealth);
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedEvent, float, NewMaxHealth);
-	
 protected:
 	/** Interaction Component **/
 	UPROPERTY(BlueprintReadOnly)
@@ -62,8 +60,8 @@ public:
 protected:
 	void Move(const FInputActionValue&);
 
-	// Rotate Camera Spring Arm by 45 degrees
-	void RotateCamera();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void Zoom(const float& Delta);
 
 	UFUNCTION(BlueprintCallable)
 	void TryLockOn();
@@ -73,11 +71,7 @@ protected:
 
 	void DoLockOn(float DeltaTime);
 
-	void OnHealthChanged(const FOnAttributeChangeData&) const;
-	void OnMaxHealthChanged(const FOnAttributeChangeData&) const;
-
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-	
 private:
 	void InitAbilityActorInfo();
 
