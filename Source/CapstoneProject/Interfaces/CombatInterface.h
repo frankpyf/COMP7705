@@ -26,7 +26,7 @@ public:
 	FVector GetAttackSocketLocation();
 	
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void UpdateFacingDirection(const FVector& FacingDirection);
+	void FaceTowards(const FVector& TargetLocation);
 
 	virtual void OnHit() = 0;
 	virtual void OnDeath() = 0;
