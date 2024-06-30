@@ -13,5 +13,7 @@ UCLASS()
 class CAPSTONEPROJECT_API UGameplayAbility_Dash : public UGameplayAbility
 {
 	GENERATED_BODY()
+protected:
+	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
 };
