@@ -107,10 +107,10 @@ void AHeroCharacter::Move(const FInputActionValue& Value)
 	const FRotator& CameraRotation = GetComponentByClass<USpringArmComponent>()->GetRelativeRotation();
 
 	// get forward vector
-	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	const FVector ForwardDirection = bWantToStrafe ? GetActorForwardVector() : FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	
 	// get right vector 
-	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	const FVector RightDirection = bWantToStrafe ? GetActorRightVector() : FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 	// add movement 
 	AddMovementInput(ForwardDirection, MovementVector.Y);
@@ -226,15 +226,18 @@ void AHeroCharacter::InitAbilityActorInfo()
 	}
 }
 
-void AHeroCharacter::WantToStrafe() const
+void AHeroCharacter::WantToStrafe()
 {
-	// TODO: Modify Speed
+	bWantToStrafe = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 }
 
-void AHeroCharacter::StopStrafing() const
+void AHeroCharacter::StopStrafing()
 {
+	bWantToStrafe = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 }

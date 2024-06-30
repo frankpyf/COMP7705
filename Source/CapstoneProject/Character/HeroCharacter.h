@@ -41,11 +41,16 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	float LockRange = 1000.f;
+
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bWantToStrafe = false;
+
+	bool bLockOnEnemy = false;
 private:
 	UPROPERTY()
 	TObjectPtr<class AEnemyCharacter> FocusedEnemy = nullptr;
 	
-	bool bLockOnEnemy = false;
 public:
 	AHeroCharacter();
 
@@ -75,6 +80,6 @@ protected:
 private:
 	void InitAbilityActorInfo();
 
-	void WantToStrafe() const;
-	void StopStrafing() const;
+	void WantToStrafe();
+	void StopStrafing();
 };
