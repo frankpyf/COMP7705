@@ -9,7 +9,10 @@ void UGameplayAbility_Dash::ActivateAbility(const FGameplayAbilitySpecHandle Han
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	if (!CommitAbility(Handle, ActorInfo, ActivationInfo))
+	{
+		EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 		return;
+	}
 	if (auto BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo()))
 	{
 		if (auto MovementComp = Cast<UCharacterMovementComponent>(BaseCharacter->GetMovementComponent()))
@@ -17,8 +20,6 @@ void UGameplayAbility_Dash::ActivateAbility(const FGameplayAbilitySpecHandle Han
 			const FVector Acceleration = MovementComp->GetCurrentAcceleration();
 			const float Acceleration1D = Acceleration.Length();
 			const FVector Dir = Acceleration1D > 0 ? Acceleration.GetSafeNormal2D() : BaseCharacter->GetActorForwardVector();
-
-			MovementComp->AddImpulse(Dir * 2000, true);
 		}
 	}
 

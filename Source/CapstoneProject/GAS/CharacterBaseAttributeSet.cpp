@@ -44,7 +44,7 @@ void UCharacterBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffect
 			}
 			else
 			{
-				
+				// On Damage
 			}
 		}
 	}
