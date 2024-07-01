@@ -5,7 +5,6 @@
 #include "Corridor.h"
 #include "CapstoneProject/Interactables/PortalActor.h"
 #include "CapstoneProject/Interactables/BaseInteractable.h"
-#include "Components/SplineComponent.h"
 
 // Sets default values
 ADungeonGenerator::ADungeonGenerator()
@@ -44,26 +43,20 @@ void ADungeonGenerator::AddRoom(int32 X, int32 Y, int32 RoomLenX, int32 RoomLenY
 	}
 }
 
-ACorridor* ADungeonGenerator::PlaceCorridor(int32 X, int32 Y)
+ACorridor* ADungeonGenerator::PlaceCorridor(const TArray<FVector>& InPoints)
 {
-	if(CorridorActor.Get())
+	if(InPoints.Num() == 0)
+		return nullptr;
+	// offset on the Z so that we can draw on RVT
+	const FVector Origin((InPoints[0].X + 0.5)* TileLen, (InPoints[0].Y + 0.5) * TileLen, 2.f);
+	const FTransform OriginTransform(Origin);
+	ACorridor* CurCorridor = GetWorld()->SpawnActorDeferred<ACorridor>(CorridorActor, OriginTransform, this);
+	for(const auto& InPoint : InPoints)
 	{
-		const FVector ActualWorldPos = FVector((X + 0.5) * TileLen, (Y + 0.5) * TileLen, 0);
-		FActorSpawnParameters Params;
-		Params.Owner = this;
-		auto CurCorridor = GetWorld()->SpawnActor<ACorridor>(CorridorActor, ActualWorldPos, FRotator::ZeroRotator, Params);
-		return CurCorridor;
+		CurCorridor->AddPoint(FVector((InPoint.X + 0.5)* TileLen, (InPoint.Y + 0.5) * TileLen, 2.f));
 	}
-	return nullptr;
-}
-
-void ADungeonGenerator::AddCorridorPoint(ACorridor* InCorridor, int32 X, int32 Y)
-{
-	if(InCorridor)
-	{
-		const FVector ActualWorldPos = FVector((X + 0.5) * TileLen, (Y + 0.5) * TileLen, 0);
-		InCorridor->AddPoint(ActualWorldPos);
-	}
+	CurCorridor->FinishSpawning(OriginTransform);
+	return CurCorridor;
 }
 
 void ADungeonGenerator::SetSpawnPoint(const int32 X, const int32 Y)

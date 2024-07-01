@@ -60,9 +60,8 @@ public:
 	void AddRoom(int32 X, int32 Y, int32 RoomLenX, int32 RoomLenY);
 
 	UFUNCTION(BlueprintCallable)
-	ACorridor* PlaceCorridor(int32 X, int32 Y);
-	UFUNCTION(BlueprintCallable)
-	void AddCorridorPoint(ACorridor* InCorridor, int32 X, int32 Y);
+	ACorridor* PlaceCorridor(const TArray<FVector>& InPoints);
+	
 	UFUNCTION(BlueprintCallable)
 	void SetSpawnPoint(const int32 X, const int32 Y);
 	

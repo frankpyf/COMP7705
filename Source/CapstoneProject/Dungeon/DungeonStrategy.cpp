@@ -183,7 +183,8 @@ TArray<EDungeonType> ILinearStrategy::DoGenerate(ADungeonGenerator& InGenerator)
 	for (int Idx = 0; Idx < Rooms.Num() - 1; ++Idx)
 	{
 		const auto ShortestPath = DungeonGenerationUtils::AStar(InGenerator, Data, Rooms[Idx], Rooms[Idx+1]);
-		ACorridor* CurHallway = nullptr;
+		
+		TArray<FVector> CorridorPoints;
 		for(const auto CurPoint : ShortestPath)
 		{
 			auto& CurTile = Data[CurPoint.X * InGenerator.GetLenY() + CurPoint.Y];
@@ -191,21 +192,10 @@ TArray<EDungeonType> ILinearStrategy::DoGenerate(ADungeonGenerator& InGenerator)
 				continue;
 			if(Rooms[Idx].IsInside(CurPoint))
 				break;
-			if(CurTile == EDungeonType::Floor)
-			{
-				CurHallway = nullptr;
-				continue;
-			}
-			if(CurHallway == nullptr)
-			{
-				CurHallway = InGenerator.PlaceCorridor(CurPoint.X, CurPoint.Y);
-			}
-			else
-			{
-				InGenerator.AddCorridorPoint(CurHallway, CurPoint.X, CurPoint.Y);
-			}
+			CorridorPoints.Add(FVector(CurPoint.X, CurPoint.Y, 0.f));
 			CurTile = EDungeonType::Corridor;
 		}
+		InGenerator.PlaceCorridor(CorridorPoints);
 	}
 	return Data;
 }
@@ -293,30 +283,21 @@ TArray<EDungeonType> ITinyKeepStrategy::DoGenerate(ADungeonGenerator& InGenerato
 		const auto ShortestPath = DungeonGenerationUtils::AStar(InGenerator, Data,
 			Rooms[Parent[Idx]],
 			Rooms[Idx]);
-		ACorridor* CurHallway = nullptr;
+		TArray<FVector> CorridorPoints;
+		
 		for(const auto CurPoint : ShortestPath)
 		{
 			auto& CurTile = Data[CurPoint.X * InGenerator.GetLenY() + CurPoint.Y];
-			if(Rooms[Idx].IsInside(CurPoint) || Rooms[Parent[Idx]].IsInside(CurPoint))
+			if(Rooms[Idx].IsInside(CurPoint))
 				continue;
 			if(Rooms[Parent[Idx]].IsInside(CurPoint))
 				break;
 			
-			if(CurTile == EDungeonType::Floor)
-			{
-				CurHallway = nullptr;
-				continue;
-			}
-			if(CurHallway == nullptr)
-			{
-				CurHallway = InGenerator.PlaceCorridor(CurPoint.X, CurPoint.Y);
-			}
-			else
-			{
-				InGenerator.AddCorridorPoint(CurHallway, CurPoint.X, CurPoint.Y);
-			}
+			CorridorPoints.Add(FVector(CurPoint.X, CurPoint.Y, 0.));
 			CurTile = EDungeonType::Corridor;
 		}
+		
+		InGenerator.PlaceCorridor(CorridorPoints);
 	}
 
 	// Choose a Room to Spawn Treasure Chest
