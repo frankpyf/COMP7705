@@ -23,6 +23,12 @@ void AEnemyCharacter::BeginPlay()
 	}
 }
 
+void AEnemyCharacter::OnHit()
+{
+	Super::OnHit();
+	
+}
+
 void AEnemyCharacter::OnDeath()
 {
 	Super::OnDeath();

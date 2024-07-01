@@ -64,6 +64,16 @@ void AHeroCharacter::BeginPlay()
 		{
 			MaxHealthChanged.Broadcast(Data.NewValue);
 		});
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCharacterBaseAttributeSet::GetStaminaAttribute())
+		.AddLambda([this](const FOnAttributeChangeData& Data)
+		{
+			if(Data.NewValue == 0)
+			{
+				bExhausted = true;
+				GetCharacterMovement()->MaxWalkSpeed = 400.f;
+			}
+			// Broadcast
+		});
 	}
 }
 
@@ -104,13 +114,11 @@ void AHeroCharacter::Move(const FInputActionValue& Value)
 	const FRotator& Rotation = GetControlRotation();
 	const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-	const FRotator& CameraRotation = GetComponentByClass<USpringArmComponent>()->GetRelativeRotation();
-
 	// get forward vector
-	const FVector ForwardDirection = bWantToStrafe ? GetActorForwardVector() : FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	const FVector ForwardDirection = bLockOnEnemy ? GetActorForwardVector() : FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	
 	// get right vector 
-	const FVector RightDirection = bWantToStrafe ? GetActorRightVector() : FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	const FVector RightDirection = bLockOnEnemy ? GetActorRightVector() : FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 	// add movement 
 	AddMovementInput(ForwardDirection, MovementVector.Y);
@@ -226,17 +234,15 @@ void AHeroCharacter::InitAbilityActorInfo()
 	}
 }
 
-void AHeroCharacter::WantToStrafe()
+void AHeroCharacter::WantToStrafe() const
 {
-	bWantToStrafe = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 }
 
-void AHeroCharacter::StopStrafing()
+void AHeroCharacter::StopStrafing() const
 {
-	bWantToStrafe = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;

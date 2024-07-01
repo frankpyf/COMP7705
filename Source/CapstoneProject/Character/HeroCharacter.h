@@ -41,11 +41,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	float LockRange = 1000.f;
-
-
-	UPROPERTY(BlueprintReadOnly)
-	bool bWantToStrafe = false;
-
+	
+	bool bExhausted = false;
 	bool bLockOnEnemy = false;
 private:
 	UPROPERTY()
@@ -74,12 +71,15 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void StopLocking();
 
+	UFUNCTION(BlueprintCallable)
+	bool IsTired() const { return bExhausted; }
+
 	void DoLockOn(float DeltaTime);
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 private:
 	void InitAbilityActorInfo();
 
-	void WantToStrafe();
-	void StopStrafing();
+	void WantToStrafe() const;
+	void StopStrafing() const;
 };
