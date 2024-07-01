@@ -16,9 +16,6 @@ class CAPSTONEPROJECT_API ARoom : public AActor
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USplineComponent* BoundingSplineComponent;
-
-	UPROPERTY(EditAnywhere)
-	class UStaticMesh* WallMesh;
 	
 	// Room has to be at least 4 tiles in X axis
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Room Size")
@@ -34,8 +31,4 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void OnConstruction(const FTransform& Transform) override;
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 };

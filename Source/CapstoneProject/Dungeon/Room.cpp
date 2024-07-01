@@ -14,13 +14,7 @@ int32 ARoom::TileUnitLen = 100;
 ARoom::ARoom()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> WallAsset(TEXT("/Game/LevelPrototyping/Meshes/SM_Cube"));
-	if(WallAsset.Succeeded())
-	{
-		WallMesh = WallAsset.Object;
-	}
+	PrimaryActorTick.bCanEverTick = false;
 	
 	BoundingSplineComponent = CreateDefaultSubobject<USplineComponent>(TEXT("Bounding Spline"), true);
 	SetRootComponent(BoundingSplineComponent);
@@ -55,10 +49,3 @@ void ARoom::OnConstruction(const FTransform& Transform)
 
 	BoundingSplineComponent->SetClosedLoop(true);
 }
-
-// Called every frame
-void ARoom::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
