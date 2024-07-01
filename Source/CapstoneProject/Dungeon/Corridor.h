@@ -15,6 +15,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USplineComponent* CorridorSplineComponent;
 
+	UPROPERTY(EditDefaultsOnly)
+	UStaticMesh* Mesh;
+
+	UPROPERTY(EditDefaultsOnly)
+	UMaterialInterface* PathMaterial;
+	
+	UPROPERTY(EditDefaultsOnly)
+	URuntimeVirtualTexture* LandscapeRVT;
 public:	
 	// Sets default values for this actor's properties
 	ACorridor();
@@ -25,8 +33,5 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	virtual void OnConstruction(const FTransform& Transform) override;
 };
