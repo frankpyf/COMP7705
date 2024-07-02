@@ -303,9 +303,13 @@ TArray<EDungeonType> ITinyKeepStrategy::DoGenerate(ADungeonGenerator& InGenerato
 	// Choose a Room to Spawn Treasure Chest
 	{
 		const uint32 RandRoomIdx = FMath::RandRange(0, Rooms.Num() - 1);
-		const auto RandCenter = Rooms[RandRoomIdx].GetCenter().IntPoint();
-		InGenerator.AddChest(RandCenter.X, RandCenter.Y);
-		Data[RandCenter.X * InGenerator.GetLenX() + RandCenter.Y] = EDungeonType::Treasure;
+		const FVector MinPoint(Rooms[RandRoomIdx].Min, 0.f);
+		const FVector MaxPoint(Rooms[RandRoomIdx].Max, 0.f);
+		const FBox SelectedRoom(MinPoint, MaxPoint);
+		const FVector RandPoint = FMath::RandPointInBox(SelectedRoom);
+		InGenerator.AddChest(RandPoint.X, RandPoint.Y);
+		const int32 Idx = static_cast<int32>(RandPoint.X) * InGenerator.GetLenX() + static_cast<int32>(RandPoint.Y);
+		Data[Idx] = EDungeonType::Treasure;
 	}
 
 	// Choose a Room to Spawn Portal

@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Room.generated.h"
 
+class AEnemyCharacter;
+
 UCLASS()
 class CAPSTONEPROJECT_API ARoom : public AActor
 {
@@ -23,6 +25,9 @@ protected:
 	// Room has to be at least 4 tiles in Y axis
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Room Size")
 	int32 YLen = 10;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bEnemySpawned = false;
 public:	
 	// Sets default values for this actor's properties
 	ARoom();
@@ -31,4 +36,13 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void OnConstruction(const FTransform& Transform) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SpawnEnemy(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
 };

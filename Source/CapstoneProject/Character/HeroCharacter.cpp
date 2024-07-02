@@ -11,7 +11,6 @@
 #include "CapstoneProject/Game/BasePlayerState.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "GameplayEffectTypes.h"
 #include "CapstoneProject/Components/InteractionComponent.h"
 #include "Kismet/KismetMathLibrary.h"

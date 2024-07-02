@@ -3,11 +3,9 @@
 
 #include "Room.h"
 
-#include "NavigationSystem.h"
-#include "AI/NavigationSystemBase.h"
+#include "CapstoneProject/Character/HeroCharacter.h"
+#include "Components/BoxComponent.h"
 #include "Components/SplineComponent.h"
-#include "NavMesh/NavMeshBoundsVolume.h"
-#include "NavMesh/RecastNavMesh.h"
 int32 ARoom::TileUnitLen = 100;
 
 // Sets default values
@@ -48,4 +46,15 @@ void ARoom::OnConstruction(const FTransform& Transform)
 	BoundingSplineComponent->SetSplinePointType(BoundingSplineComponent->GetNumberOfSplinePoints() - 1, ESplinePointType::Linear);
 
 	BoundingSplineComponent->SetClosedLoop(true);
+
+	UBoxComponent* EnemySpawnerBox = NewObject<UBoxComponent>(this, UBoxComponent::StaticClass(), TEXT("EnemySpawnerBox"));
+	EnemySpawnerBox->SetupAttachment(RootComponent);
+	EnemySpawnerBox->AddRelativeLocation(FVector( InX / 2.f, InY / 2.f,0));
+	EnemySpawnerBox->SetBoxExtent(FVector( InX / 2.f, InY / 2.f,0));
+	EnemySpawnerBox->SetCollisionProfileName("OverlapOnlyPawn");
+	EnemySpawnerBox->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
+	EnemySpawnerBox->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	EnemySpawnerBox->SetGenerateOverlapEvents(true);
+	EnemySpawnerBox->OnComponentBeginOverlap.AddUniqueDynamic(this, &ARoom::SpawnEnemy);
+	EnemySpawnerBox->RegisterComponent();
 }
