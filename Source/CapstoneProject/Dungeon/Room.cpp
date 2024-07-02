@@ -53,7 +53,6 @@ void ARoom::OnConstruction(const FTransform& Transform)
 	EnemySpawnerBox->SetBoxExtent(FVector( InX / 2.f, InY / 2.f,0));
 	EnemySpawnerBox->SetCollisionProfileName("OverlapOnlyPawn");
 	EnemySpawnerBox->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
-	EnemySpawnerBox->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	EnemySpawnerBox->SetGenerateOverlapEvents(true);
 	EnemySpawnerBox->OnComponentBeginOverlap.AddUniqueDynamic(this, &ARoom::SpawnEnemy);
 	EnemySpawnerBox->RegisterComponent();
