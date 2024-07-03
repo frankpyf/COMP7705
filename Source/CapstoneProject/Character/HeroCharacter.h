@@ -8,8 +8,9 @@
 
 struct FInputActionValue;
 struct FOnAttributeChangeData;
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedEvent, float, NewHealth);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedEvent, float, NewMaxHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature, float, NewHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedSignature, float, NewMaxHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStaminaChangeSignature, float, NewStamina);
 /**
  * 
  */
@@ -34,10 +35,13 @@ protected:
 	UInputAction* RotateCameraAction;
 	
 	UPROPERTY(BlueprintAssignable, Category = "Abilities | Attribute")
-	FOnHealthChangedEvent HealthChanged;
+	FOnHealthChangedSignature HealthChanged;
 
 	UPROPERTY(BlueprintAssignable, Category = "Abilities | Attribute")
-	FOnMaxHealthChangedEvent MaxHealthChanged;
+	FOnMaxHealthChangedSignature MaxHealthChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Abilities | Attribute")
+	FOnStaminaChangeSignature StaminaChanged;
 
 	UPROPERTY(EditDefaultsOnly)
 	float LockRange = 1000.f;

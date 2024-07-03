@@ -72,6 +72,7 @@ void AHeroCharacter::BeginPlay()
 				GetCharacterMovement()->MaxWalkSpeed = 400.f;
 			}
 			// Broadcast
+			StaminaChanged.Broadcast(Data.NewValue);
 		});
 	}
 }
