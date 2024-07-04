@@ -66,11 +66,23 @@ void AHeroCharacter::BeginPlay()
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCharacterBaseAttributeSet::GetStaminaAttribute())
 		.AddLambda([this](const FOnAttributeChangeData& Data)
 		{
-			if(Data.NewValue == 0)
+			if(Data.NewValue < 25)
 			{
 				bExhausted = true;
 				GetCharacterMovement()->MaxWalkSpeed = 400.f;
 			}
+			else if(Data.NewValue == 100)
+			{
+				AbilitySystemComponent->RemoveActiveGameplayEffect(ActiveStaminaRecoverEffect);
+				bExhausted = false;
+				GetCharacterMovement()->MaxWalkSpeed = 600.f;
+			}
+			if(Data.NewValue < Data.OldValue)
+			{
+				auto SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(StaminaRecoverEffect, 1.0, AbilitySystemComponent->MakeEffectContext());
+				ActiveStaminaRecoverEffect = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+			}
+			
 			// Broadcast
 			StaminaChanged.Broadcast(Data.NewValue);
 		});

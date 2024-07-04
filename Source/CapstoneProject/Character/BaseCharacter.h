@@ -28,7 +28,6 @@ protected:
 	/** Begin Combat Interface **/
 	
 	FVector GetAttackSocketLocation_Implementation() override;
-	virtual void OnHit() override;
 	virtual void OnDeath() override;
 
 	/** End Combat Interface **/

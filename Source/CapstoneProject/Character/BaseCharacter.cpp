@@ -19,11 +19,6 @@ ABaseCharacter::ABaseCharacter()
 	GetMesh()->SetGenerateOverlapEvents(true);
 }
 
-void ABaseCharacter::OnHit()
-{
-	
-}
-
 void ABaseCharacter::OnDeath()
 {
 	// Multicast Death (Play sound and animation, etc.) 

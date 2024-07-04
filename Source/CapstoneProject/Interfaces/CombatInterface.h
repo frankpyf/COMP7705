@@ -28,6 +28,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void FaceTowards(const FVector& TargetLocation);
 
-	virtual void OnHit() = 0;
+	UFUNCTION(BlueprintNativeEvent)
+	void OnHit();
 	virtual void OnDeath() = 0;
 };

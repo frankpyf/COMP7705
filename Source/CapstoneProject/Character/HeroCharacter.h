@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
+#include "GameplayEffectTypes.h"
 #include "HeroCharacter.generated.h"
 
 struct FInputActionValue;
@@ -42,6 +43,10 @@ protected:
 
 	UPROPERTY(BlueprintAssignable, Category = "Abilities | Attribute")
 	FOnStaminaChangeSignature StaminaChanged;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UGameplayEffect> StaminaRecoverEffect;
+	FActiveGameplayEffectHandle ActiveStaminaRecoverEffect;
 
 	UPROPERTY(EditDefaultsOnly)
 	float LockRange = 1000.f;
