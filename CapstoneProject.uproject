@@ -45,10 +45,6 @@
 		{
 			"Name": "MotionWarping",
 			"Enabled": true
-		},
-		{
-			"Name": "LearningAgents",
-			"Enabled": true
 		}
 	]
 }
