@@ -34,6 +34,16 @@ AHeroCharacter::AHeroCharacter()
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
 }
 
+void AHeroCharacter::SetComboNotify(UComboWindow* InNotify)
+{
+	ComboNotify = InNotify;
+}
+
+void AHeroCharacter::SetCanCombo(bool NewFlag)
+{
+	bComboWindow = NewFlag;
+}
+
 void AHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();

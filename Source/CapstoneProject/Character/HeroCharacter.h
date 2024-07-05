@@ -20,10 +20,15 @@ class CAPSTONEPROJECT_API AHeroCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
+	UPROPERTY()
+	TObjectPtr<class AEnemyCharacter> FocusedEnemy = nullptr;
 protected:
 	/** Interaction Component **/
 	UPROPERTY(BlueprintReadOnly)
 	class UInteractionComponent* InteractionComponent;
+	
+	UPROPERTY(BlueprintReadOnly)
+	class UComboWindow* ComboNotify;
 	
 	/** MappingContext */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
@@ -50,15 +55,17 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	float LockRange = 1000.f;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bComboWindow = false;
 	
 	bool bExhausted = false;
 	bool bLockOnEnemy = false;
-private:
-	UPROPERTY()
-	TObjectPtr<class AEnemyCharacter> FocusedEnemy = nullptr;
-	
 public:
 	AHeroCharacter();
+
+	void SetComboNotify(UComboWindow*);
+	void SetCanCombo(bool NewFlag);
 
 	virtual void BeginPlay() override;
 	

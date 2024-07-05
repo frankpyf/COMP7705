@@ -34,6 +34,9 @@ protected:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void HandleDeath();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	bool DoMeleeAttack();
 	
 	UFUNCTION(BlueprintCallable)
 	void GiveAbility(TSubclassOf<UGameplayAbility> NewAbility);

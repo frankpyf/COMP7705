@@ -49,6 +49,18 @@ FVector ABaseCharacter::GetAttackSocketLocation_Implementation()
 	return GetMesh()->GetSocketLocation("SpellLocation");
 }
 
+bool ABaseCharacter::DoMeleeAttack_Implementation()
+{
+	if(AbilitySystemComponent)
+	{
+		FGameplayTagContainer Tag;
+		Tag.AddTag(FGameplayTag::RequestGameplayTag("Ability.Attack.Melee"));
+		
+		return AbilitySystemComponent->TryActivateAbilitiesByTag(Tag);
+	}
+	return false;
+}
+
 void ABaseCharacter::GiveAbility(TSubclassOf<UGameplayAbility> NewAbility)
 {
 	if(!HasAuthority() || !AbilitySystemComponent || !IsValid(NewAbility))
