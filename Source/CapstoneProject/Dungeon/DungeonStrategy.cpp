@@ -288,9 +288,9 @@ TArray<EDungeonType> ITinyKeepStrategy::DoGenerate(ADungeonGenerator& InGenerato
 		for(const auto CurPoint : ShortestPath)
 		{
 			auto& CurTile = Data[CurPoint.X * InGenerator.GetLenY() + CurPoint.Y];
-			if(Rooms[Idx].IsInside(CurPoint))
+			if(Rooms[Idx].IsInside(CurPoint) && CurTile != EDungeonType::Wall)
 				continue;
-			if(Rooms[Parent[Idx]].IsInside(CurPoint))
+			if(Rooms[Parent[Idx]].IsInside(CurPoint) && CurTile != EDungeonType::Wall)
 				break;
 			
 			CorridorPoints.Add(FVector(CurPoint.X, CurPoint.Y, 0.));
