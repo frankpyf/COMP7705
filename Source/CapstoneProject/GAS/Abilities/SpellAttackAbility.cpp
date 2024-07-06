@@ -23,9 +23,6 @@ void USpellAttackAbility::SpawnProjectile(const FVector& TargetLocation)
 	
 	if(!GetAvatarActorFromActorInfo()->Implements<UCombatInterface>())
 		return;
-
-	// Update Facing Direction
-	ICombatInterface::Execute_FaceTowards(GetAvatarActorFromActorInfo(), TargetLocation);
 	
 	const FVector SourceLocation = ICombatInterface::Execute_GetAttackSocketLocation(GetAvatarActorFromActorInfo());
 	const FRotator Rotation = (TargetLocation - SourceLocation).Rotation();
