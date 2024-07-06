@@ -58,8 +58,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bComboWindow = false;
-	
+	UPROPERTY(BlueprintReadOnly)
 	bool bExhausted = false;
+	UPROPERTY(BlueprintReadOnly)
 	bool bLockOnEnemy = false;
 public:
 	AHeroCharacter();
@@ -96,6 +97,6 @@ protected:
 private:
 	void InitAbilityActorInfo();
 
-	void WantToStrafe() const;
-	void StopStrafing() const;
+	void WantToStrafe();
+	void StopStrafing();
 };

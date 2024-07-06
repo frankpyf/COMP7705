@@ -84,8 +84,11 @@ void AHeroCharacter::BeginPlay()
 			else if(Data.NewValue == 100)
 			{
 				AbilitySystemComponent->RemoveActiveGameplayEffect(ActiveStaminaRecoverEffect);
-				bExhausted = false;
-				GetCharacterMovement()->MaxWalkSpeed = 600.f;
+				if(bExhausted)
+				{
+					bExhausted = false;
+					GetCharacterMovement()->MaxWalkSpeed = bLockOnEnemy ? 300.f : 600.f;
+				}
 			}
 			if(Data.NewValue < Data.OldValue)
 			{
@@ -202,7 +205,7 @@ void AHeroCharacter::DoLockOn(float DeltaTime)
 {
 	if(!bLockOnEnemy)
 		return;
-	if(!FocusedEnemy)
+	if(!IsValid(FocusedEnemy))
 	{
 		StopLocking();
 		return;
@@ -256,16 +259,16 @@ void AHeroCharacter::InitAbilityActorInfo()
 	}
 }
 
-void AHeroCharacter::WantToStrafe() const
+void AHeroCharacter::WantToStrafe()
 {
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 }
 
-void AHeroCharacter::StopStrafing() const
+void AHeroCharacter::StopStrafing()
 {
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
-	GetCharacterMovement()->MaxWalkSpeed = 600.f;
+	GetCharacterMovement()->MaxWalkSpeed = bExhausted ? 400.f : 600.f;
 }
