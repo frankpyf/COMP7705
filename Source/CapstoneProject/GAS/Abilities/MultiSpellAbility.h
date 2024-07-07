@@ -29,10 +29,7 @@ protected:
     UPROPERTY(EditDefaultsOnly)
     TSubclassOf<class UGameplayEffect> DamageEffectClass;
 
-    // Ìí¼ÓSpawnRadiusÊôÐÔ
+    // ï¿½ï¿½ï¿½SpawnRadiusï¿½ï¿½ï¿½ï¿½
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
-    float SpawnRadius;
-
-public:
-    UMultiSpellAbility();
+    float SpawnRadius = 200.0f;
 };

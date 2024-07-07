@@ -4,11 +4,6 @@
 #include "CapstoneProject/SpellProjectile.h"
 #include "CapstoneProject/Interfaces/CombatInterface.h"
 
-UMultiSpellAbility::UMultiSpellAbility()
-{
-    // ³õÊ¼»¯Ä¬ÈÏ°ë¾¶
-    SpawnRadius = 200.0f;
-}
 
 void UMultiSpellAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
@@ -19,25 +14,20 @@ void UMultiSpellAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 
 void UMultiSpellAbility::SpawnProjectiles(const TArray<FVector>& TargetLocations)
 {
+    // Server only
     const bool bIsAuthority = GetAvatarActorFromActorInfo()->HasAuthority();
     if (!bIsAuthority)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("No authority to spawn projectiles."));
         return;
-    }
 
     if (!GetAvatarActorFromActorInfo()->Implements<UCombatInterface>())
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Avatar does not implement UCombatInterface."));
         return;
-    }
 
     const FVector SourceLocation = ICombatInterface::Execute_GetAttackSocketLocation(GetAvatarActorFromActorInfo());
     const int32 NumProjectiles = TargetLocations.Num();
 
     for (int32 i = 0; i < NumProjectiles; ++i)
     {
-        // ¼ÆËãÃ¿¸öÍ¶ÉäÎïµÄÎ»ÖÃ£¬¾ùÔÈ·Ö²¼ÔÚÔ²»·ÉÏ
+        // ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½Í¶ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½È·Ö²ï¿½ï¿½ï¿½Ô²ï¿½ï¿½ï¿½ï¿½
         const float Angle = (2.0f * PI / NumProjectiles) * i;
         const FVector Offset = FVector(FMath::Cos(Angle) * SpawnRadius, FMath::Sin(Angle) * SpawnRadius, 0.0f);
         const FVector SpawnLocation = SourceLocation + Offset;
