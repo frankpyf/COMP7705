@@ -69,7 +69,7 @@ public:
 
 
 /**
- * 
+ *
  */
 UCLASS()
 class CAPSTONEPROJECT_API USSaveGame : public USaveGame
@@ -86,5 +86,5 @@ public:
 	TArray<FActorSaveData> SavedActors;
 
 	FPlayerSaveData* GetPlayerData(APlayerState* PlayerState);
-	
+
 };
