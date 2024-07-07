@@ -213,6 +213,7 @@ void AHeroCharacter::DoLockOn(float DeltaTime)
 
 	const FVector EnemyLocation = FocusedEnemy->GetActorLocation();
 	const FVector HeroLocation = GetActorLocation();
+	const FVector TargetLocation(EnemyLocation.X, EnemyLocation.Y, HeroLocation.Z);
 
 	// Check Focused Enemy Still in Range
 	if(FVector::Dist(HeroLocation, EnemyLocation) > LockRange)
@@ -228,7 +229,7 @@ void AHeroCharacter::DoLockOn(float DeltaTime)
 	}
 
 	// Lock On Enemy
-	const auto TurnRotator = UKismetMathLibrary::FindLookAtRotation(HeroLocation, EnemyLocation);
+	const auto TurnRotator = UKismetMathLibrary::FindLookAtRotation(HeroLocation, TargetLocation);
 	
 	SetActorRotation(TurnRotator);
 }
