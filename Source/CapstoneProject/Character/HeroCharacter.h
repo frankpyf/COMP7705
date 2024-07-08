@@ -96,6 +96,8 @@ protected:
 	void DoLockOn(float DeltaTime);
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+	void LoadProgress();
 private:
 	void InitAbilityActorInfo();
 

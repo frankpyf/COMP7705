@@ -119,6 +119,8 @@ void AHeroCharacter::PossessedBy(AController* NewController)
 	// Set Actor Info for the Sever
 	InitAbilityActorInfo();
 
+	LoadProgress();
+
 	// Give Default Abilities
 	for(const auto Ability : DefaultAbilities)
 	{
@@ -308,5 +310,34 @@ void AHeroCharacter::SaveProgress_Implementation(const FName& CheckpointTag)
 		if (!HasAuthority()) return;
 
 		CPGameMode->SaveInGameProgressData(SaveData);
+	}
+}
+
+void AHeroCharacter::LoadProgress()
+{
+	ACapstoneProjectGameMode* CPGameMode = Cast<ACapstoneProjectGameMode>(UGameplayStatics::GetGameMode(this));
+	if (CPGameMode)
+	{
+		ULoadScreenSaveGame* SaveData = CPGameMode->RetrieveInGameSaveData();
+		if (SaveData == nullptr) return;
+
+		if (SaveData->bFirstTimeLoadIn)
+		{
+			InitializeDefaultAttributes();
+		}
+		else
+		{
+			if (ABasePlayerState* CPPlayerState = Cast<ABasePlayerState>(GetPlayerState()))
+			{
+				//AuraPlayerState->SetLevel(SaveData->PlayerLevel);
+				//AuraPlayerState->SetXP(SaveData->XP);
+				//AuraPlayerState->SetAttributePoints(SaveData->AttributePoints);
+				//AuraPlayerState->SetSpellPoints(SaveData->SpellPoints);
+			}
+
+			HealthChanged.Broadcast(SaveData->Health);
+			MaxHealthChanged.Broadcast(SaveData->MaxHealth);
+			StaminaChanged.Broadcast(SaveData->Stamina);
+		}
 	}
 }
