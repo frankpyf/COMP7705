@@ -8,9 +8,10 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
+class UGameplayEffect;
+class UCharacterBaseAttributeSet;
+class AWeaponBase;
 class UGameplayAbility;
-class UAbilitySystemComponent;
-class UAttributeSet;
 
 UCLASS()
 class CAPSTONEPROJECT_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
@@ -20,9 +21,13 @@ class CAPSTONEPROJECT_API ABaseCharacter : public ACharacter, public IAbilitySys
 public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
-	
+
+	UFUNCTION(BlueprintCallable)
+	bool IsAlive() const { return !bAlive; }
 	UFUNCTION(BlueprintCallable)
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
+	
+	class UCharacterBaseAttributeSet const * GetAttributeSet() const { return BaseAttributeSet; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -46,12 +51,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
-
 protected:
-	// For Enemy Actors only
+	UPROPERTY(BlueprintReadWrite)
+	AWeaponBase* OwningWeapon;
+	
 	UPROPERTY()
-	const class UCharacterBaseAttributeSet* BaseAttributeSet;
+	const UCharacterBaseAttributeSet* BaseAttributeSet;
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
@@ -59,8 +64,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> DefaultAbilities;
 
-	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSet;
+	UPROPERTY(BlueprintReadOnly)
+	bool bAlive = true;
 
 	virtual void InitializeDefaultAttributes() const;
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;

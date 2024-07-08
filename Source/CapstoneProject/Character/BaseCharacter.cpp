@@ -21,6 +21,7 @@ ABaseCharacter::ABaseCharacter()
 
 void ABaseCharacter::OnDeath()
 {
+	bAlive = false;
 	// Multicast Death (Play sound and animation, etc.) 
 	HandleDeath();
 }

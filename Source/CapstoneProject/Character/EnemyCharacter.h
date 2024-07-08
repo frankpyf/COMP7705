@@ -16,6 +16,12 @@ class CAPSTONEPROJECT_API AEnemyCharacter : public ABaseCharacter
 	GENERATED_BODY()
 public:
 	AEnemyCharacter();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void StartMeleeTrace();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void EndMeleeTrace();
 	
 protected:
 	virtual void BeginPlay() override;

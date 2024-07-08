@@ -35,6 +35,8 @@ AHeroCharacter::AHeroCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
+
+	Tags.Add("Player");
 }
 
 void AHeroCharacter::SetComboNotify(UComboWindow* InNotify)
@@ -119,7 +121,8 @@ void AHeroCharacter::PossessedBy(AController* NewController)
 	// Set Actor Info for the Sever
 	InitAbilityActorInfo();
 
-	LoadProgress();
+	// TODO: Implement Laod
+	// LoadProgress();
 
 	// Give Default Abilities
 	for(const auto Ability : DefaultAbilities)
@@ -179,6 +182,8 @@ void AHeroCharacter::TryLockOn()
 	{
 		if(auto Enemy = Cast<AEnemyCharacter>(Hit.GetActor()))
 		{
+			if(!Enemy->IsAlive())
+				continue;
 			const FVector EnemyLocation = Enemy->GetActorLocation();
 			const float Dist = FVector::Dist(GetActorLocation(), EnemyLocation);
 			if(Dist < MinDist)
@@ -221,8 +226,8 @@ void AHeroCharacter::DoLockOn(float DeltaTime)
 	const FVector HeroLocation = GetActorLocation();
 	const FVector TargetLocation(EnemyLocation.X, EnemyLocation.Y, HeroLocation.Z);
 
-	// Check Focused Enemy Still in Range
-	if(FVector::Dist(HeroLocation, EnemyLocation) > LockRange)
+	// Check Focused Enemy is still in range and alive
+	if(FVector::Dist(HeroLocation, EnemyLocation) > LockRange || !FocusedEnemy->IsAlive())
 	{
 		FocusedEnemy = nullptr;
 		// if out of range try get one

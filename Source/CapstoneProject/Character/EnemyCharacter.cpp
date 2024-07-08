@@ -9,6 +9,8 @@ AEnemyCharacter::AEnemyCharacter()
 {
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	BaseAttributeSet = CreateDefaultSubobject<UCharacterBaseAttributeSet>(TEXT("BaseAttributeSet"));
+
+	Tags.Add("Enemy");
 }
 
 void AEnemyCharacter::BeginPlay()
@@ -20,6 +22,11 @@ void AEnemyCharacter::BeginPlay()
 	{
 		BaseAttributeSet = AbilitySystemComponent->GetSet<UCharacterBaseAttributeSet>();
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+		// Give Default Abilities
+		for(const auto Ability : DefaultAbilities)
+		{
+			GiveAbility(Ability);
+		}
 	}
 }
 
