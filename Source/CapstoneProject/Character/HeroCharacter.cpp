@@ -295,7 +295,7 @@ void AHeroCharacter::SaveProgress_Implementation(const FName& CheckpointTag)
 
 		SaveData->PlayerStartTag = CheckpointTag;
 
-		if (ABasePlayerState* PlayerState = Cast<ABasePlayerState>(GetPlayerState()))
+		if (ABasePlayerState* PS = Cast<ABasePlayerState>(GetPlayerState()))
 		{
 			//SaveData->PlayerLevel = PlayerState->GetPlayerLevel();
 			//SaveData->XP = PlayerState->GetXP();
