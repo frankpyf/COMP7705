@@ -6,6 +6,9 @@
 #include "GameFramework/GameModeBase.h"
 #include "CapstoneProjectGameMode.generated.h"
 
+class ULoadScreenSaveGame;
+class USaveGame;
+
 UCLASS(minimalapi)
 class ACapstoneProjectGameMode : public AGameModeBase
 {
@@ -13,6 +16,14 @@ class ACapstoneProjectGameMode : public AGameModeBase
 
 public:
 	ACapstoneProjectGameMode();
+
+	ULoadScreenSaveGame* RetrieveInGameSaveData();
+	ULoadScreenSaveGame* GetSaveSlotData(const FString& SlotName, int32 SlotIndex) const;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<USaveGame> LoadScreenSaveGameClass;
+
+	void SaveInGameProgressData(ULoadScreenSaveGame* SaveObject);
 };
 
 

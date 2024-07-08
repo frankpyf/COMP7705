@@ -15,6 +15,9 @@
 #include "CapstoneProject/Components/InteractionComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include <Kismet/GameplayStatics.h>
+#include <CapstoneProject/Game/CapstoneProjectGameMode.h>
+#include "CapstoneProject/Save/LoadScreenSaveGame.h"
 
 AHeroCharacter::AHeroCharacter()
 {
@@ -130,6 +133,7 @@ void AHeroCharacter::OnRep_PlayerState()
 	// Set Actor Info for the Client
 	InitAbilityActorInfo();
 }
+
 
 void AHeroCharacter::Move(const FInputActionValue& Value)
 {
@@ -272,4 +276,37 @@ void AHeroCharacter::StopStrafing()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	GetCharacterMovement()->MaxWalkSpeed = bExhausted ? 400.f : 600.f;
+}
+
+void AHeroCharacter::SaveProgress_Implementation(const FName& CheckpointTag)
+{
+	ACapstoneProjectGameMode* CPGameMode = Cast<ACapstoneProjectGameMode>(UGameplayStatics::GetGameMode(this));
+	if (CPGameMode)
+	{
+		ULoadScreenSaveGame* SaveData = CPGameMode->RetrieveInGameSaveData();
+		if (SaveData == nullptr) return;
+
+		SaveData->PlayerStartTag = CheckpointTag;
+
+		if (ABasePlayerState* PlayerState = Cast<ABasePlayerState>(GetPlayerState()))
+		{
+			//SaveData->PlayerLevel = PlayerState->GetPlayerLevel();
+			//SaveData->XP = PlayerState->GetXP();
+			//SaveData->AttributePoints = PlayerState->GetAttributePoints();
+			//SaveData->SpellPoints = PlayerState->GetSpellPoints();
+		}
+		SaveData->Health = UCharacterBaseAttributeSet::GetHealthAttribute().GetNumericValue(GetAttributeSet());
+		SaveData->MaxHealth = UCharacterBaseAttributeSet::GetMaxHealthAttribute().GetNumericValue(GetAttributeSet());
+		SaveData->Stamina = UCharacterBaseAttributeSet::GetStaminaAttribute().GetNumericValue(GetAttributeSet());
+		SaveData->MaxStamina = UCharacterBaseAttributeSet::GetMaxStaminaAttribute().GetNumericValue(GetAttributeSet());
+		SaveData->Mana = UCharacterBaseAttributeSet::GetManaAttribute().GetNumericValue(GetAttributeSet());
+		SaveData->MaxMana = UCharacterBaseAttributeSet::GetMaxManaAttribute().GetNumericValue(GetAttributeSet());
+		SaveData->IncomingDamage = UCharacterBaseAttributeSet::GetIncomingDamageAttribute().GetNumericValue(GetAttributeSet());
+
+		SaveData->bFirstTimeLoadIn = false;
+
+		if (!HasAuthority()) return;
+
+		CPGameMode->SaveInGameProgressData(SaveData);
+	}
 }

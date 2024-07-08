@@ -9,6 +9,8 @@
 #include "BaseCharacter.generated.h"
 
 class UGameplayAbility;
+class UAbilitySystemComponent;
+class UAttributeSet;
 
 UCLASS()
 class CAPSTONEPROJECT_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
@@ -44,6 +46,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+
 protected:
 	// For Enemy Actors only
 	UPROPERTY()
@@ -54,4 +58,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> DefaultAbilities;
+
+	UPROPERTY()
+	TObjectPtr<UAttributeSet> AttributeSet;
 };

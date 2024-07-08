@@ -4,6 +4,9 @@
 #include "CapstoneProject/CapstoneProjectPlayerController.h"
 #include "GameFramework/HUD.h"
 #include "UObject/ConstructorHelpers.h"
+#include "CapstoneProject/Save/LoadScreenSaveGame.h"
+#include "CPGameInstance.h"
+#include <Kismet/GameplayStatics.h>
 
 ACapstoneProjectGameMode::ACapstoneProjectGameMode()
 {
@@ -29,4 +32,40 @@ ACapstoneProjectGameMode::ACapstoneProjectGameMode()
 	{
 		HUDClass = HUDBPClass.Class;
 	}
+}
+
+ULoadScreenSaveGame* ACapstoneProjectGameMode::RetrieveInGameSaveData()
+{
+	UCPGameInstance* CPGameInstance = Cast<UCPGameInstance>(GetGameInstance());
+
+	const FString InGameLoadSlotName = CPGameInstance->LoadSlotName;
+	const int32 InGameLoadSlotIndex = CPGameInstance->LoadSlotIndex;
+
+	return GetSaveSlotData(InGameLoadSlotName, InGameLoadSlotIndex);
+}
+
+ULoadScreenSaveGame* ACapstoneProjectGameMode::GetSaveSlotData(const FString& SlotName, int32 SlotIndex) const
+{
+	USaveGame* SaveGameObject = nullptr;
+	if (UGameplayStatics::DoesSaveGameExist(SlotName, SlotIndex))
+	{
+		SaveGameObject = UGameplayStatics::LoadGameFromSlot(SlotName, SlotIndex);
+	}
+	else
+	{
+		SaveGameObject = UGameplayStatics::CreateSaveGameObject(LoadScreenSaveGameClass);
+	}
+	ULoadScreenSaveGame* LoadScreenSaveGame = Cast<ULoadScreenSaveGame>(SaveGameObject);
+	return LoadScreenSaveGame;
+}
+
+void ACapstoneProjectGameMode::SaveInGameProgressData(ULoadScreenSaveGame* SaveObject)
+{
+	UCPGameInstance* AuraGameInstance = Cast<UCPGameInstance>(GetGameInstance());
+
+	const FString InGameLoadSlotName = AuraGameInstance->LoadSlotName;
+	const int32 InGameLoadSlotIndex = AuraGameInstance->LoadSlotIndex;
+	AuraGameInstance->PlayerStartTag = SaveObject->PlayerStartTag;
+
+	UGameplayStatics::SaveGameToSlot(SaveObject, InGameLoadSlotName, InGameLoadSlotIndex);
 }
