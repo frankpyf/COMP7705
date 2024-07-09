@@ -65,6 +65,8 @@ protected:
 public:
 	AHeroCharacter();
 
+	void OnDeath_Implementation() override;
+
 	void SetComboNotify(UComboWindow*);
 	void SetCanCombo(bool NewFlag);
 

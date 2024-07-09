@@ -1,6 +1,6 @@
 #include "CapstoneAssetManager.h"
 #include "CapstoneProject.h"
-#include "Descriptors/ItemDescriptor.h"
+#include "CapstoneProject/Items/ItemBase.h"
 
 void UCapstoneAssetManager::StartInitialLoading()
 {
@@ -18,11 +18,11 @@ UCapstoneAssetManager& UCapstoneAssetManager::Get()
 	return *NewObject<UCapstoneAssetManager>();
 }
 
-UItemDescriptor* UCapstoneAssetManager::ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning)
+UItemBase* UCapstoneAssetManager::ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning)
 {
 	FSoftObjectPath ItemPath = GetPrimaryAssetPath(PrimaryAssetId);
 
-	auto LoadedItemDesc = Cast<UItemDescriptor>(ItemPath.TryLoad());
+	auto LoadedItemDesc = Cast<UItemBase>(ItemPath.TryLoad());
 	if(bLogWarning && !LoadedItemDesc)
 	{
 		UE_LOG(LogCapstoneProject, Warning, TEXT("Load failed: %s"), *PrimaryAssetId.ToString());

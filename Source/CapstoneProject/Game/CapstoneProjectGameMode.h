@@ -14,16 +14,27 @@ class ACapstoneProjectGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<USaveGame> LoadScreenSaveGameClass;
 public:
 	ACapstoneProjectGameMode();
 
 	ULoadScreenSaveGame* RetrieveInGameSaveData();
 	ULoadScreenSaveGame* GetSaveSlotData(const FString& SlotName, int32 SlotIndex) const;
 
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<USaveGame> LoadScreenSaveGameClass;
+	UFUNCTION(BlueprintCallable)
+	virtual void GameOver();
 
 	void SaveInGameProgressData(ULoadScreenSaveGame* SaveObject);
+protected:
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnGameOver();
+
+	UPROPERTY(BlueprintReadWrite)
+	int32 GameLevel = 0;
+
+	UPROPERTY(BlueprintReadOnly)
+	uint8 bGameOver : 1;
 };
 
 

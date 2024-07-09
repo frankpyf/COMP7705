@@ -30,5 +30,6 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void OnHit();
-	virtual void OnDeath() = 0;
+	UFUNCTION(BlueprintNativeEvent)
+	void OnDeath();
 };

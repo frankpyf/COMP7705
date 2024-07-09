@@ -39,6 +39,15 @@ AHeroCharacter::AHeroCharacter()
 	Tags.Add("Player");
 }
 
+void AHeroCharacter::OnDeath_Implementation()
+{
+	Super::OnDeath_Implementation();
+	if(auto CPGM = Cast<ACapstoneProjectGameMode>(UGameplayStatics::GetGameMode(this)))
+	{
+		CPGM->GameOver();
+	}
+}
+
 void AHeroCharacter::SetComboNotify(UComboWindow* InNotify)
 {
 	ComboNotify = InNotify;
@@ -308,7 +317,6 @@ void AHeroCharacter::SaveProgress_Implementation(const FName& CheckpointTag)
 		SaveData->MaxStamina = UCharacterBaseAttributeSet::GetMaxStaminaAttribute().GetNumericValue(GetAttributeSet());
 		SaveData->Mana = UCharacterBaseAttributeSet::GetManaAttribute().GetNumericValue(GetAttributeSet());
 		SaveData->MaxMana = UCharacterBaseAttributeSet::GetMaxManaAttribute().GetNumericValue(GetAttributeSet());
-		SaveData->IncomingDamage = UCharacterBaseAttributeSet::GetIncomingDamageAttribute().GetNumericValue(GetAttributeSet());
 
 		SaveData->bFirstTimeLoadIn = false;
 

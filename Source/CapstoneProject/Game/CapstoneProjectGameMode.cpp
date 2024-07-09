@@ -59,6 +59,15 @@ ULoadScreenSaveGame* ACapstoneProjectGameMode::GetSaveSlotData(const FString& Sl
 	return LoadScreenSaveGame;
 }
 
+void ACapstoneProjectGameMode::GameOver()
+{
+	if(bGameOver == false)
+	{
+		OnGameOver();
+		bGameOver = true;
+	}
+}
+
 void ACapstoneProjectGameMode::SaveInGameProgressData(ULoadScreenSaveGame* SaveObject)
 {
 	UCPGameInstance* AuraGameInstance = Cast<UCPGameInstance>(GetGameInstance());

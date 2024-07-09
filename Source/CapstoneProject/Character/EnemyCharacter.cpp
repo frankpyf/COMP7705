@@ -29,9 +29,3 @@ void AEnemyCharacter::BeginPlay()
 		}
 	}
 }
-
-void AEnemyCharacter::OnDeath()
-{
-	Super::OnDeath();
-	SetLifeSpan(5.f);
-}

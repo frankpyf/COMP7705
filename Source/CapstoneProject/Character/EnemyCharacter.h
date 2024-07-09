@@ -25,8 +25,4 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
-
-	/** Begin of CombatInterface **/
-	virtual void OnDeath() override;
-	/** End of CombatInterface **/
 };

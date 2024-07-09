@@ -19,7 +19,7 @@ ABaseCharacter::ABaseCharacter()
 	GetMesh()->SetGenerateOverlapEvents(true);
 }
 
-void ABaseCharacter::OnDeath()
+void ABaseCharacter::OnDeath_Implementation()
 {
 	bAlive = false;
 	// Multicast Death (Play sound and animation, etc.) 
@@ -28,6 +28,7 @@ void ABaseCharacter::OnDeath()
 
 void ABaseCharacter::HandleDeath_Implementation()
 {
+	bAlive = false;
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->SetEnableGravity(true);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);

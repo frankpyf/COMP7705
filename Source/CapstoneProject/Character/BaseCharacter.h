@@ -35,12 +35,12 @@ protected:
 	/** Begin Combat Interface **/
 	
 	FVector GetAttackSocketLocation_Implementation() override;
-	virtual void OnDeath() override;
+	void OnDeath_Implementation() override;
 
 	/** End Combat Interface **/
 
-	UFUNCTION(NetMulticast, Reliable)
-	void HandleDeath();
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
+	virtual void HandleDeath();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	bool DoMeleeAttack();
@@ -64,7 +64,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> DefaultAbilities;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	bool bAlive = true;
 
 	virtual void InitializeDefaultAttributes() const;

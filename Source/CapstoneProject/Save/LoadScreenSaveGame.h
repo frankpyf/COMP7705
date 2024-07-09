@@ -81,8 +81,4 @@ public:
 
 	UPROPERTY()
 	float MaxMana = 0;
-
-	UPROPERTY()
-	float IncomingDamage = 0;
-	
 };

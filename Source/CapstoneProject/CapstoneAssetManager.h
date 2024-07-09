@@ -16,5 +16,5 @@ public:
 
 	static UCapstoneAssetManager& Get();
 	
-	class UItemDescriptor* ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning = true);
+	class UItemBase* ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning = true);
 };

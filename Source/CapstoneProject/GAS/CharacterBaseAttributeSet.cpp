@@ -31,15 +31,14 @@ void UCharacterBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffect
 		{
 			const float NewHealth = GetHealth() - LocalIncomingDamage;
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
-			auto CombatInterface = Cast<ICombatInterface>(Data.Target.GetAvatarActor());
 			
-			const bool bFatal = NewHealth <= 0.f;
-			if(CombatInterface)
+			if(Data.Target.GetAvatarActor()->Implements<UCombatInterface>())
 			{
+				const bool bFatal = NewHealth <= 0.f;
 				ICombatInterface::Execute_OnHit(Data.Target.GetAvatarActor());
 				if(bFatal)
 				{
-					CombatInterface->OnDeath();
+					ICombatInterface::Execute_OnDeath(Data.Target.GetAvatarActor());
 				}
 			}
 		}
