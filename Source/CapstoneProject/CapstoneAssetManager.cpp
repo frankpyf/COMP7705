@@ -2,6 +2,10 @@
 #include "CapstoneProject.h"
 #include "CapstoneProject/Items/ItemBase.h"
 
+const FPrimaryAssetType UCapstoneAssetManager::PotionType = TEXT("Potion");
+const FPrimaryAssetType UCapstoneAssetManager::SkillType = TEXT("Skill");
+const FPrimaryAssetType UCapstoneAssetManager::WeaponType = TEXT("Weapon");
+
 void UCapstoneAssetManager::StartInitialLoading()
 {
 	Super::StartInitialLoading();

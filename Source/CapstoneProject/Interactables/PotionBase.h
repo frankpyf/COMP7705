@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CapstoneProject/Interactables/BaseInteractable.h"
+#include "BaseInteractable.h"
 #include "PotionBase.generated.h"
 
 class UItemBase;
@@ -20,17 +20,14 @@ public:
 	virtual void Interact_Implementation(AActor* InstigatorPawn) override;
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
 	void ApplyEffectToTarget(AActor* Target);
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 protected:
+	UPROPERTY(EditAnywhere, Category="Game Effects")
+	TSubclassOf<class UGameplayAbility> AbilityToGive;
+	
 	UPROPERTY(EditAnywhere, Category="Game Effects")
 	TSubclassOf<class UGameplayEffect> EffectToApply;
 	

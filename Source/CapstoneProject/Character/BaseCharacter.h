@@ -24,6 +24,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool IsAlive() const { return !bAlive; }
+	
+	UFUNCTION(BlueprintCallable)
+	void GiveAbility(TSubclassOf<UGameplayAbility> NewAbility);
+	
 	UFUNCTION(BlueprintCallable)
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 	
@@ -44,9 +48,6 @@ protected:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	bool DoMeleeAttack();
-	
-	UFUNCTION(BlueprintCallable)
-	void GiveAbility(TSubclassOf<UGameplayAbility> NewAbility);
 public:	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

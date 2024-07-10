@@ -8,7 +8,7 @@ class UCapstoneAssetManager : public UAssetManager
 {
 	GENERATED_BODY()
 public:
-	static const FPrimaryAssetType PortionType;
+	static const FPrimaryAssetType PotionType;
 	static const FPrimaryAssetType SkillType;
 	static const FPrimaryAssetType WeaponType;
 	

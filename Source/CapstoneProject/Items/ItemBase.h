@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "CapstoneProject/CapstoneAssetManager.h"
 #include "ItemBase.generated.h"
 
 /**
