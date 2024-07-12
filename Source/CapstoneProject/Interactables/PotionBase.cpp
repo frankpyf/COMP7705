@@ -22,8 +22,11 @@ void APotionBase::Interact_Implementation(AActor* InstigatorPawn)
 	{
 		auto PC = CastChecked<ACapstoneProjectPlayerController>(HeroCharacter->GetController());
 
-		PC->AddItem(ItemType, AddAmount);
-		HeroCharacter->GiveAbility(AbilityToGive);
+		if(PC->AddItem(ItemType, AddAmount))
+		{
+			HeroCharacter->GiveAbility(AbilityToGive);
+			Destroy();
+		}
 	}
 }
 
