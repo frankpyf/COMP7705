@@ -132,7 +132,7 @@ bool ACapstoneProjectPlayerController::SaveInventory()
 			}
 			CurrentSaveGame->SlottedItems.Add(AssetId);
 		}
-		GameInstance->WriteSaveGame();
+		// GameInstance->WriteSaveGame();
 		return true;
 	}
 	return false;
