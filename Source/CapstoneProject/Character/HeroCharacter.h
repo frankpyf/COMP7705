@@ -11,6 +11,8 @@ struct FInputActionValue;
 struct FOnAttributeChangeData;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature, float, NewHealth);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedSignature, float, NewMaxHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnManaChangedSignature, float, NewMana);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxManaChangedSignature, float, NewMaxMana);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStaminaChangeSignature, float, NewStamina);
 /**
  * 
@@ -45,6 +47,12 @@ protected:
 
 	UPROPERTY(BlueprintAssignable, Category = "Abilities | Attribute")
 	FOnMaxHealthChangedSignature MaxHealthChanged;
+	
+	UPROPERTY(BlueprintAssignable, Category = "Abilities | Attribute")
+	FOnManaChangedSignature ManaChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Abilities | Attribute")
+	FOnMaxManaChangedSignature MaxManaChanged;
 
 	UPROPERTY(BlueprintAssignable, Category = "Abilities | Attribute")
 	FOnStaminaChangeSignature StaminaChanged;
@@ -78,8 +86,6 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 
 	virtual void OnRep_PlayerState() override;
-
-	virtual void SaveProgress_Implementation(const FName& CheckpointTag);
 protected:
 	void Move(const FInputActionValue&);
 
@@ -98,8 +104,6 @@ protected:
 	void DoLockOn(float DeltaTime);
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
-	void LoadProgress();
 private:
 	void InitAbilityActorInfo();
 

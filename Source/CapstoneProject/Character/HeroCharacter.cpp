@@ -15,9 +15,8 @@
 #include "CapstoneProject/Components/InteractionComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include <Kismet/GameplayStatics.h>
-#include <CapstoneProject/Game/CapstoneProjectGameMode.h>
-#include "CapstoneProject/Save/LoadScreenSaveGame.h"
+#include "Kismet/GameplayStatics.h"
+#include "CapstoneProject/Game/CapstoneProjectGameMode.h"
 
 AHeroCharacter::AHeroCharacter()
 {
@@ -63,11 +62,10 @@ void AHeroCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	//Add Input Mapping Context
-	if(auto PC = GetController<APlayerController>())
+	if(const auto PC = GetController<APlayerController>())
 	{
-		if (auto Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
+		if (const auto Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
 		{
-			Subsystem->ClearAllMappings();
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
@@ -86,6 +84,16 @@ void AHeroCharacter::BeginPlay()
 		.AddLambda([this](const FOnAttributeChangeData& Data)
 		{
 			MaxHealthChanged.Broadcast(Data.NewValue);
+		});
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCharacterBaseAttributeSet::GetManaAttribute())
+		.AddLambda([this](const FOnAttributeChangeData& Data)
+		{
+			ManaChanged.Broadcast(Data.NewValue);
+		});
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCharacterBaseAttributeSet::GetMaxHealthAttribute())
+		.AddLambda([this](const FOnAttributeChangeData& Data)
+		{
+			MaxManaChanged.Broadcast(Data.NewValue);
 		});
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCharacterBaseAttributeSet::GetStaminaAttribute())
 		.AddLambda([this](const FOnAttributeChangeData& Data)
@@ -292,65 +300,4 @@ void AHeroCharacter::StopStrafing()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	GetCharacterMovement()->MaxWalkSpeed = bExhausted ? 400.f : 600.f;
-}
-
-void AHeroCharacter::SaveProgress_Implementation(const FName& CheckpointTag)
-{
-	ACapstoneProjectGameMode* CPGameMode = Cast<ACapstoneProjectGameMode>(UGameplayStatics::GetGameMode(this));
-	if (CPGameMode)
-	{
-		ULoadScreenSaveGame* SaveData = CPGameMode->RetrieveInGameSaveData();
-		if (SaveData == nullptr) return;
-
-		SaveData->PlayerStartTag = CheckpointTag;
-
-		if (ABasePlayerState* PS = Cast<ABasePlayerState>(GetPlayerState()))
-		{
-			//SaveData->PlayerLevel = PlayerState->GetPlayerLevel();
-			//SaveData->XP = PlayerState->GetXP();
-			//SaveData->AttributePoints = PlayerState->GetAttributePoints();
-			//SaveData->SpellPoints = PlayerState->GetSpellPoints();
-		}
-		SaveData->Health = UCharacterBaseAttributeSet::GetHealthAttribute().GetNumericValue(GetAttributeSet());
-		SaveData->MaxHealth = UCharacterBaseAttributeSet::GetMaxHealthAttribute().GetNumericValue(GetAttributeSet());
-		SaveData->Stamina = UCharacterBaseAttributeSet::GetStaminaAttribute().GetNumericValue(GetAttributeSet());
-		SaveData->MaxStamina = UCharacterBaseAttributeSet::GetMaxStaminaAttribute().GetNumericValue(GetAttributeSet());
-		SaveData->Mana = UCharacterBaseAttributeSet::GetManaAttribute().GetNumericValue(GetAttributeSet());
-		SaveData->MaxMana = UCharacterBaseAttributeSet::GetMaxManaAttribute().GetNumericValue(GetAttributeSet());
-
-		SaveData->bFirstTimeLoadIn = false;
-
-		if (!HasAuthority()) return;
-
-		CPGameMode->SaveInGameProgressData(SaveData);
-	}
-}
-
-void AHeroCharacter::LoadProgress()
-{
-	ACapstoneProjectGameMode* CPGameMode = Cast<ACapstoneProjectGameMode>(UGameplayStatics::GetGameMode(this));
-	if (CPGameMode)
-	{
-		ULoadScreenSaveGame* SaveData = CPGameMode->RetrieveInGameSaveData();
-		if (SaveData == nullptr) return;
-
-		if (SaveData->bFirstTimeLoadIn)
-		{
-			InitializeDefaultAttributes();
-		}
-		else
-		{
-			if (ABasePlayerState* CPPlayerState = Cast<ABasePlayerState>(GetPlayerState()))
-			{
-				//AuraPlayerState->SetLevel(SaveData->PlayerLevel);
-				//AuraPlayerState->SetXP(SaveData->XP);
-				//AuraPlayerState->SetAttributePoints(SaveData->AttributePoints);
-				//AuraPlayerState->SetSpellPoints(SaveData->SpellPoints);
-			}
-
-			HealthChanged.Broadcast(SaveData->Health);
-			MaxHealthChanged.Broadcast(SaveData->MaxHealth);
-			StaminaChanged.Broadcast(SaveData->Stamina);
-		}
-	}
 }

@@ -23,7 +23,7 @@ public:
 	ABaseCharacter();
 
 	UFUNCTION(BlueprintCallable)
-	bool IsAlive() const { return !bAlive; }
+	bool IsAlive() const { return bAlive; }
 	
 	UFUNCTION(BlueprintCallable)
 	void GiveAbility(TSubclassOf<UGameplayAbility> NewAbility);

@@ -22,6 +22,7 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::OnDeath_Implementation()
 {
 	bAlive = false;
+	DetachFromControllerPendingDestroy();
 	// Multicast Death (Play sound and animation, etc.) 
 	HandleDeath();
 }
