@@ -159,6 +159,15 @@ bool ACapstoneProjectPlayerController::LoadInventory()
 				InventoryData.Add(LoadedItem, Value);
 			}
 		}
+		for(int32 Idx = 0; Idx < CurrentSaveGame->SlottedItems.Num(); ++Idx)
+		{
+			auto* LoadedItem = AssetManager.ForceLoadItem(CurrentSaveGame->SlottedItems[Idx]);
+			if(LoadedItem)
+			{
+				SlottedItems[Idx] = LoadedItem;
+				SlottedItemChanged.Broadcast(Idx, LoadedItem);
+			}
+		}
 		return true;
 	}
 	return false;
