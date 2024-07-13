@@ -30,4 +30,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = SaveGame)
 	TArray<FPrimaryAssetId> SlottedItems;
+
+	bool EncryptAndSaveToFile(const FString& SlotName, const int32 SlotIdx);
+	bool LoadAndDecryptFromFile(const FString& SlotName, const int32 SlotIdx);
+private:
+	bool GenerateRSAKeys();
+	bool LoadRSAKeys(FString& PublicKey, FString& PrivateKey);
+	FString PublicKeyPath;
+	FString PrivateKeyPath;
 };
