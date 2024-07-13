@@ -30,7 +30,7 @@ bool ACapstoneProjectPlayerController::AddItem(UItemBase* NewItem, int32 Amount)
 		TryAddToSlots(NewItem);
 	}
 	InventoryData[NewItem] = OwnedAmount + Amount;
-	SaveInventory();
+	// SaveInventory();
 	return true;
 }
 
@@ -132,7 +132,7 @@ bool ACapstoneProjectPlayerController::SaveInventory()
 			}
 			CurrentSaveGame->SlottedItems.Add(AssetId);
 		}
-		// GameInstance->WriteSaveGame();
+		GameInstance->WriteSaveGame();
 		return true;
 	}
 	return false;
