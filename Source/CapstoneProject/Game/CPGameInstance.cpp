@@ -19,6 +19,7 @@ bool UCPGameInstance::WriteSaveGame()
 	}
 	
 	bSaving = true;
+	//if (CurrentSaveGame && CurrentSaveGame->EncryptAndSaveToFile(SlotName, SlotIdx))
 	UGameplayStatics::AsyncSaveGameToSlot(GetCurrentSaveGame(), SlotName, SlotIdx, FAsyncSaveGameToSlotDelegate::CreateLambda(
 		[this](const FString& Name, const int32 Idx, bool bSuccess)
 		{
@@ -46,6 +47,7 @@ bool UCPGameInstance::HandleSaveGameLoaded(USaveGame* SaveGameObject)
 	}
 	else
 	{
+		//CurrentSaveGame->LoadAndDecryptFromFile(SlotName, SlotIdx);
 		CurrentSaveGame = Cast<UCPSaveGame>(UGameplayStatics::CreateSaveGameObject(UCPSaveGame::StaticClass()));
 
 		// ..
