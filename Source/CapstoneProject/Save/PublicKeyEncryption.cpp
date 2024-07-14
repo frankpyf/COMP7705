@@ -1,8 +1,10 @@
 #include "PublicKeyEncryption.h"
+#define UI UI_ST
+THIRD_PARTY_INCLUDES_START
 #include "Misc/Base64.h"
 #include <openssl/rsa.h>
 #include <openssl/pem.h>
-#include <openssl/err.h>
+#undef UI
 
 bool FPublicKeyEncryption::GenerateKeyPair(FString& PublicKey, FString& PrivateKey)
 {

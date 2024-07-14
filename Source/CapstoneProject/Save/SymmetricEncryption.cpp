@@ -1,6 +1,10 @@
 #include "SymmetricEncryption.h"
+
+#define UI UI_ST
+THIRD_PARTY_INCLUDES_START
 #include <openssl/evp.h>
 #include <openssl/rand.h>
+#undef UI
 
 bool FSymmetricEncryption::EncryptData(const TArray<uint8>& Data, const TArray<uint8>& Key, TArray<uint8>& EncryptedData)
 {
