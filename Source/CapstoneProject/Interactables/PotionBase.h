@@ -19,18 +19,10 @@ public:
 
 	virtual void Interact_Implementation(AActor* InstigatorPawn) override;
 
-protected:
-
-	UFUNCTION(BlueprintCallable)
-	void ApplyEffectToTarget(AActor* Target);
-
-protected:
+public:
 	UPROPERTY(EditAnywhere, Category="Game Effects")
 	TSubclassOf<class UGameplayAbility> AbilityToGive;
-	
-	UPROPERTY(EditAnywhere, Category="Game Effects")
-	TSubclassOf<class UGameplayEffect> EffectToApply;
-	
+protected:
 	UPROPERTY(EditDefaultsOnly)
 	UItemBase* ItemType;
 

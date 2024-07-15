@@ -13,4 +13,7 @@ public:
 	{
 		ItemType = UCapstoneAssetManager::PotionType;
 	}
+
+	UPROPERTY(EditAnywhere, Category="Game Effects")
+	TSubclassOf<class UGameplayEffect> EffectToApply;
 };

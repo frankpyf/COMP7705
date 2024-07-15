@@ -2,12 +2,16 @@
 
 #include "CapstoneProjectPlayerController.h"
 
+#include "AbilitySystemComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Character/HeroCharacter.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
 #include "Engine/LocalPlayer.h"
 #include "Game/CPGameInstance.h"
+#include "Interactables/PotionBase.h"
 #include "Items/ItemBase.h"
+#include "Items/PotionItem.h"
 #include "Save/CPSaveGame.h"
 
 DEFINE_LOG_CATEGORY(Log_CSP);
@@ -57,7 +61,7 @@ bool ACapstoneProjectPlayerController::ConsumeItem(UItemBase* ConsumingItem, int
 		UE_LOG(Log_CSP, Warning, TEXT("Consume Null"));
 		return false;
 	}
-	if(Amount)
+	if(Amount < 1)
 	{
 		UE_LOG(Log_CSP, Warning, TEXT("Consume invalid amount"));
 		return false;
@@ -66,6 +70,14 @@ bool ACapstoneProjectPlayerController::ConsumeItem(UItemBase* ConsumingItem, int
 	if(OwnedAmount < Amount)
 		return false;
 	InventoryData[ConsumingItem] -= Amount;
+	if(ConsumingItem->ItemType == UCapstoneAssetManager::PotionType)
+	{
+		auto PlayerCharacter = CastChecked<AHeroCharacter>(GetCharacter());
+		auto PlayerASC = PlayerCharacter->GetAbilitySystemComponent();
+		auto Potion = CastChecked<UPotionItem>(ConsumingItem);
+		auto SpecHandle = PlayerASC->MakeOutgoingSpec(Potion->EffectToApply, 1.0, PlayerASC->MakeEffectContext());
+		PlayerASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+	}
 	if(InventoryData[ConsumingItem] == 0)
 	{
 		InventoryData.Remove(ConsumingItem);

@@ -30,15 +30,3 @@ void APotionBase::Interact_Implementation(AActor* InstigatorPawn)
 	}
 }
 
-void APotionBase::ApplyEffectToTarget(AActor* Target)
-{
-	if(auto TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target))
-	{
-		auto EffectContext = TargetASC->MakeEffectContext();
-		EffectContext.AddSourceObject(this);
-		check(EffectToApply)
-		auto SpecHandle = TargetASC->MakeOutgoingSpec(EffectToApply, 1.f, EffectContext);
-		TargetASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
-	}
-}
-
