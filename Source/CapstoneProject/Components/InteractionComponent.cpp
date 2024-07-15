@@ -48,6 +48,8 @@ void UInteractionComponent::FindBestInteract()
 {
 	if(const auto OwnerCharacter = Cast<AHeroCharacter>(GetOwner()))
 	{
+		if(!OwnerCharacter->IsAlive())
+			return;
 		const auto OwnerController = OwnerCharacter->GetController<APlayerController>();
 		FHitResult Hit;
 		OwnerController->GetHitResultUnderCursor(ECC_Visibility, false, Hit);
